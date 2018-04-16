@@ -41,6 +41,7 @@
       area: '区域'
       project: '项目'
       packet: '改机数据'
+      task_log: '刷单日志'
     attributes:
       user:
         uid: 'ID'
