@@ -39,14 +39,7 @@
       recharge: '充值'
       pay_log: '交易明细'
       area: '区域'
-      game: '游戏信息'
-      game_update: '游戏更新'
-      game_recharge: '游戏充值'
-      agent_user: '代理人'
-      agent_config: '代理配置'
-      agent_earn_bill: '代理流水'
-      job: '兼职项目'
-      job_task: '代理任务'
+      project: '项目'
     attributes:
       user:
         uid: 'ID'
@@ -200,6 +193,18 @@
         address: '详细地址'
         location: '位置坐标'
         range: '限制范围'
+      project:
+        uniq_id: 'ID'
+        name: '名字'
+        icon: 'ICON'
+        bundle_id: 'Bundle ID/包名'
+        task_count: '任务量'
+        complete_count: '完成的任务量'
+        task_started_at: '刷单开始时间'
+        download_urls: '包下载地址'
+        opened: '是否打开'
+        task_desc: '任务说明'
+        created_at: 'at'
     errors:
       models:
         user: "用户"
