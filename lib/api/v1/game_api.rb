@@ -46,7 +46,7 @@ module API
           if @update.blank?
             return {
               packageUrl: '',
-              remoteManifestUrl: "http://47.104.163.199:8080/api/v1/game/update?code=#{params[:code]}&bv=#{params[:bv]}&os=#{params[:os]}",
+              remoteManifestUrl: "http://120.132.57.133:8080/api/v1/game/update?code=#{params[:code]}&bv=#{params[:bv]}&os=#{params[:os]}",
               version: bv,
               engineVersion: GameConfig.game_engine_version,
               assets: {},
@@ -67,7 +67,7 @@ module API
           
           {
             packageUrl: @update.package_file.try(:url) || '',
-            remoteManifestUrl: "http://47.104.163.199:8080/api/v1/game/update?code=#{params[:code]}&bv=#{params[:bv]}&os=#{params[:os]}",
+            remoteManifestUrl: "http://120.132.57.133:8080/api/v1/game/update?code=#{params[:code]}&bv=#{params[:bv]}&os=#{params[:os]}",
             version: @update.version || bv,
             engineVersion: GameConfig.game_engine_version,
             assets: assets,
