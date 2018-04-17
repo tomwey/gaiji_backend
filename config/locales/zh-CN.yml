@@ -42,6 +42,7 @@
       project: '项目'
       packet: '改机数据'
       task_log: '刷单日志'
+      device_info: '设备信息'
     attributes:
       user:
         uid: 'ID'
@@ -233,6 +234,24 @@
         cpu: '手机CPU型号'
         hardware: '手机硬件'
         fingerprint: '指纹'
+      device_info:
+        uniq_id: 'ID'
+        board: '主板'
+        brand: '品牌'
+        cpu: 'CPU'
+        cpu2: 'CPU2'
+        device: '驱动'
+        display: '显示'
+        fingerprint: '指纹'
+        hardware: '硬件'
+        product_model: '产品型号'
+        manufacturer: '生产商'
+        model: '型号'
+        product: '产品'
+        bootloader: '启动引导'
+        host: 'HOST'
+        build_tags: '编译标记'
+        incremental: 'Incremental'
     errors:
       models:
         user: "用户"

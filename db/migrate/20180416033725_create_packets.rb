@@ -22,9 +22,10 @@ class CreatePackets < ActiveRecord::Migration
       t.string :os_version # 系统版本号
       t.string :sdk_value  # 系统版本值
       t.string :sdk_int
+      t.string :screen_size # 分辨率
+      
       t.string :brand # 品牌
       t.string :model # 手机型号
-      t.string :screen_size # 分辨率
       t.string :firmware # 手机固件
       t.string :manufacturer # 厂商
       t.string :product # 产品

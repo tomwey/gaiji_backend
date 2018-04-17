@@ -1,6 +1,4 @@
-class Job < ActiveRecord::Base
-  validates :title, :body, :company, :price, :work_start_date, presence: true
-  
+class DeviceInfo < ActiveRecord::Base
   before_create :generate_unique_id
   def generate_unique_id
     begin
