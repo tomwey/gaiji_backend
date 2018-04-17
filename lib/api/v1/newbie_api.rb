@@ -57,9 +57,28 @@ module API
         
         desc "上传刷单日志"
         params do
-          
+          requires :proj_id,  type: Integer, desc: '项目ID'
+          requires :packet_id,type: Integer, desc: '改机数据ID'
+          optional :extras,   type: String,  desc: '额外的数据'
         end
         post :upload_log do
+          project = Project.find_by(uniq_id: params[:proj_id])
+          if project.blank?
+            return render_error(4004, '项目不存在')
+          end
+          
+          packet = Packet.find_by(uniq_id: params[:packet_id])
+          if packet.blank?
+            return render_error(4004, '改机数据不存在')
+          end
+          
+          log = TaskLog.create(project_id: project.uniq_id, packet_id: packet.uniq_id, extras_data: params[:extras])
+          if log
+            { log_id: log.uniq_id }
+          else
+            { log_id: -1 }
+          end
+          
         end # end upload_log
         
         desc "获取一条某个项目的留存改机数据"

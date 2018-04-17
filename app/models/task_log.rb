@@ -1,7 +1,7 @@
 class TaskLog < ActiveRecord::Base
   validates :project_id, :packet_id, presence: true
-  belongs_to :project
-  belongs_to :packet
+  # belongs_to :project
+  # belongs_to :packet
   
   before_create :generate_uniq_id
   def generate_uniq_id
