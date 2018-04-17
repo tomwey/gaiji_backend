@@ -108,7 +108,7 @@ class ROMUtils
     ]
     
     index = rand(0...screen_data.length)
-    return screen_data[index], dpi_data[index]
+    return screen_data[index],dpi_data[index]
   end
   
 end

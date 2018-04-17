@@ -23,17 +23,16 @@ class CreatePackets < ActiveRecord::Migration
       t.string :sdk_value  # 系统版本值
       t.string :sdk_int
       t.string :screen_size # 分辨率
-      
-      t.string :brand # 品牌
-      t.string :model # 手机型号
-      t.string :firmware # 手机固件
-      t.string :manufacturer # 厂商
-      t.string :product # 产品
-      t.string :device # 设备
-      t.string :board  # 主板
-      t.string :cpu # 手机CPU型号
-      t.string :hardware # 手机硬件
-      t.string :fingerprint # 指纹
+      # t.string :brand # 品牌
+      # t.string :model # 手机型号
+      # t.string :firmware # 手机固件
+      # t.string :manufacturer # 厂商
+      # t.string :product # 产品
+      # t.string :device # 设备
+      # t.string :board  # 主板
+      # t.string :cpu # 手机CPU型号
+      # t.string :hardware # 手机硬件
+      # t.string :fingerprint # 指纹
       t.timestamps null: false
     end
     add_index :packets, :uniq_id, unique: true
