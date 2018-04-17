@@ -18,12 +18,41 @@ module API
       resource :rom, desc: '数据相关接口' do
         desc "生成返回一条改机数据"
         post :create_packet do
-          { code: 0, message: 'ok', data: {
-            serial: '',
-            android_id: '',
-            imei: '',
-            imsi: '',
-          } }
+          carrier_id = ROMUtils.create_carrier_id
+          
+          os_info = ROMUtils.create_os_info
+          ver,sdk = os_info.split(',')
+          
+          screen,dpi = ROMUtils.create_screen_size
+          
+          device_info = DeviceInfo.order("RANDOM()").first
+          
+          @packet = Packet.create!(
+            serial: ROMUtils.create_serial,
+            android_id: ROMUtils.create_android_id,
+            imei: ROMUtils.create_imei,
+            sim_serial: ROMUtils.create_sim_serial,
+            imsi: ROMUtils.create_imsi_for(carrier_id),
+            sim_country: ROMUtils.create_sim_country,
+            phone_number: ROMUtils.create_tel_number,
+            carrier_id: carrier_id,
+            carrier_name: ROMUtils.create_carrier_name_for(carrier_id),
+            network_type: ROMUtils.create_network_type,
+            phone_type: ROMUtils.create_phone_type,
+            sim_state: ROMUtils.create_sim_state,
+            mac_addr: ROMUtils.create_mac_addr,
+            bluetooth_mac: ROMUtils.create_bluetooth_mac,
+            wifi_mac: ROMUtils.create_wifi_mac,
+            wifi_name: ROMUtils.create_wifi_name,
+            os_version: ver,
+            sdk_value: sdk,
+            sdk_int: sdk,
+            screen_size: screen,
+            screen_dpi: dpi,
+            device_info_id: device_info.try(:uniq_id)
+          )
+          
+          render_json(@packet, API::V1::Entities::Packet)
         end # end create
         
         desc "上传刷单日志"
