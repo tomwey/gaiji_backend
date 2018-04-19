@@ -14,4 +14,8 @@ class TaskLog < ActiveRecord::Base
     @project ||= Project.find_by(uniq_id: self.project_id)
   end
   
+  def packet
+    @packet ||= Packet.find_by(uniq_id: self.packet_id)
+  end
+  
 end
