@@ -20,6 +20,8 @@ index do
     item "查看", admin_remain_task_path(o)
     if o.join_task_count > 0
       item "清空已做任务", clear_admin_remain_task_path(o), method: :put, data: { confirm: '你确定吗？' }, class: 'danger'
+    else
+      item "重新生成任务", reset_admin_remain_task_path(o), method: :put, data: { confirm: '你确定吗？' }
     end
   end
 end
@@ -33,6 +35,17 @@ end
 member_action :clear, method: :put do
   resource.clear_joined_tasks!
   redirect_to collection_path, notice: '清空成功'
+end
+
+batch_action :reset do |ids|
+  batch_action_collection.find(ids).each do |o|
+    o.join_task
+  end
+  redirect_to collection_path, alert: "已重新生成任务"
+end
+member_action :reset, method: :put do
+  resource.join_task
+  redirect_to collection_path, notice: '重新生成任务成功'
 end
 
 form html: { multipart: true } do |f|
