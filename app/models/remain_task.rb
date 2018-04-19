@@ -32,7 +32,7 @@ class RemainTask < ActiveRecord::Base
     @logs = TaskLog.order('RANDOM()').limit(need_task_count)
     @logs.each do |log|
       if RemainTaskLog.create(task_id: self.uniq_id, proj_id: log.project_id, packet_id: log.packet_id)
-        join_count++
+        join_count = join_count + 1
       end
     end
     
