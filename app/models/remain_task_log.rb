@@ -6,4 +6,16 @@ class RemainTaskLog < ActiveRecord::Base
     end while self.class.exists?(:uniq_id => uniq_id)
   end
   
+  def project
+    @project ||= Project.find_by(uniq_id: self.proj_id)
+  end
+  
+  def packet
+    @packet ||= Packet.find_by(uniq_id: self.packet_id)
+  end
+  
+  def task
+    @task ||= RemainTask.find_by(uniq_id: self.task_id)
+  end
+  
 end

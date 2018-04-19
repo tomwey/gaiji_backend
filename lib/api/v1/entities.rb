@@ -109,6 +109,26 @@ module API
         expose :incremental
       end
       
+      class Project < Base
+        expose :uniq_id, as: :id
+        expose :name
+        expose :bundle_id
+      end
+      
+      class RemainTask < Base
+        expose :uniq_id, as: :id
+        expose :ratio
+        expose :task_date, format_with: :chinese_date
+        expose :project, using: API::V1::Entities::Project
+      end
+      
+      class RemainTaskLog < Base
+        expose :uniq_id, as: :id
+        expose :project, using: API::V1::Entities::Project
+        expose :packet, using: API::V1::Entities::Packet
+        expsoe :task, using: API::V1::Entities::RemainTask
+      end
+      
       # 红包
       class Hongbao < Base
         expose :uniq_id, as: :id

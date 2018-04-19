@@ -74,9 +74,9 @@ module API
           
           log = TaskLog.create(project_id: project.uniq_id, packet_id: packet.uniq_id, extras_data: params[:extras])
           if log
-            { log_id: log.uniq_id }
+            { code: 0, message: 'ok', data: { log_id: log.uniq_id } }
           else
-            { log_id: -1 }
+            render_error(-1, '上传失败')
           end
           
         end # end upload_log
@@ -86,6 +86,11 @@ module API
           optional :day, type: String, desc: '某一天的日期'
         end
         get :remain_tasks do
+          @tasks = RemainTask.order('id desc')
+          if params[:day]
+            @tasks = @tasks.where(created_at: "#{params[:day]} 00:00:00".."#{params[:day]} 23:59:59")
+          end
+          render_json(@tasks, API::V1::Entities::RemainTask)
         end # end
         
         desc "获取某留存任务的一条改机数据"
@@ -93,6 +98,20 @@ module API
           requires :task_id, type: Integer, desc: '留存任务ID'
         end
         get :remain_packet do
+          task = RemainTask.find_by(uniq_id: params[:task_id])
+          if task.blank?
+            return render_error(4004, '留存任务不存在')
+          end
+          
+          @log = RemainTaskLog.where(task_id: task.uniq_id, in_use: false).order('RANDOM()').first
+          if @log.blank?
+            return render_error(4004, '没有留存任务')
+          end
+          
+          @log.in_use = true
+          @log.save!
+          
+          render_json(@log, API::V1::Entities::RemainTaskLog)
         end
         
         # desc "获取一条某个项目的留存改机数据"
