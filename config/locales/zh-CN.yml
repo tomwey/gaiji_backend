@@ -41,8 +41,10 @@
       area: '区域'
       project: '项目'
       packet: '改机数据'
-      task_log: '刷单日志'
+      task_log: '任务明细'
       device_info: '设备信息'
+      remain_task: '留存任务'
+      remain_task_log: '留存任务明细'
     attributes:
       user:
         uid: 'ID'
@@ -252,6 +254,12 @@
         host: 'HOST'
         build_tags: '编译标记'
         incremental: 'Incremental'
+      remain_task:
+        ratio: '留存率'
+        task_date: '留存率任务日期'
+        proj_id: '所属项目'
+        need_task_count: '需要任务数'
+        join_task_count: '已经加入的任务数'
     errors:
       models:
         user: "用户"

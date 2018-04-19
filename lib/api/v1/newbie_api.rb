@@ -81,11 +81,29 @@ module API
           
         end # end upload_log
         
-        desc "获取一条某个项目的留存改机数据"
+        desc "获取所有留存任务" # 0001, 0002
         params do
+          optional :day, type: String, desc: '某一天的日期'
+        end
+        get :remain_tasks do
+        end # end
+        
+        desc "获取某留存任务的一条改机数据"
+        params do
+          requires :task_id, type: Integer, desc: '留存任务ID'
         end
         get :remain_packet do
-        end # end remain_packet
+        end
+        
+        # desc "获取一条某个项目的留存改机数据"
+        # params do
+        #   requires :proj_id, type: Integer, desc: '项目ID'
+        #   requires :ratio,   type: Integer, desc: '留存比率，传一个整数值'
+        #   requires :time,    type: String,  desc: '留存任务时间'
+        # end
+        # get :remain_packet do
+        #
+        # end # end remain_packet
         
       end # end resource
       
