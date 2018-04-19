@@ -10,4 +10,8 @@ class TaskLog < ActiveRecord::Base
     end while self.class.exists?(:uniq_id => uniq_id)
   end
   
+  def project
+    @project ||= Project.find_by(uniq_id: self.project_id)
+  end
+  
 end
