@@ -45,6 +45,7 @@
       device_info: '设备信息'
       remain_task: '留存任务'
       remain_task_log: '留存任务明细'
+      idcard: '身份证信息'
     attributes:
       user:
         uid: 'ID'
@@ -260,6 +261,9 @@
         proj_id: '所属项目'
         need_task_count: '需要任务数'
         join_task_count: '已经加入的任务数'
+      idcard:
+        name: '姓名'
+        card_no: '身份证号'
     errors:
       models:
         user: "用户"

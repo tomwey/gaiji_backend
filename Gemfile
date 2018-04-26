@@ -134,6 +134,8 @@ gem 'rest-client'
 # memcached
 gem 'dalli'
 
+gem "active_admin_import" , '3.0.0'
+
 # 状态机
 # gem 'state_machine'
 
