@@ -16,6 +16,8 @@
     #   title: '口令红包'
     #   grab_tip: '注意：只有一次答题的机会！'
     #   action: '提交口令抢红包'
+  active_admin_import:
+      file: '文件'
   activerecord:
     models:
       user: "用户"
@@ -264,6 +266,7 @@
       idcard:
         name: '姓名'
         card_no: '身份证号'
+        file: '文件'
     errors:
       models:
         user: "用户"
