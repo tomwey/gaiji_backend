@@ -27,6 +27,7 @@ module API
       end
       
       mount API::V1::NewbieAPI
+      mount API::V1::DatasourceAPI
       
       # mount API::V1::PayAPI
       # mount API::V1::BannersAPI

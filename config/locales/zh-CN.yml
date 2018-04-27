@@ -48,6 +48,8 @@
       remain_task: '留存任务'
       remain_task_log: '留存任务明细'
       idcard: '身份证信息'
+      user_nickname: '用户昵称信息'
+      user_chat: '聊天/评论'
     attributes:
       user:
         uid: 'ID'
@@ -267,6 +269,10 @@
         name: '姓名'
         card_no: '身份证号'
         file: '文件'
+      user_chat:
+        content: '聊天/评论内容'
+      user_nickname:
+        nickname: '昵称'
     errors:
       models:
         user: "用户"
