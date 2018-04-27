@@ -15,8 +15,42 @@ module API
         end
       end # end resource
       
+      resource :tasks, desc: '任务相关接口' do
+        desc "获取任务列表"
+        params do
+          requires :type,type: Integer,desc: '任务类型，值为1或2；1 表示新增任务，2 表示留存任务'
+          optional :day, type: String, desc: '任务日期，例如：2018-01-02'
+        end
+        get do
+          type = params[:type].to_i
+          
+          if type != 1 or type != 2
+            return render_error(-1, '不正确的Type参数')
+          end
+          
+          task_classes = %w(new_task remain_task)
+          
+          klass = Object.const_get task_classes[type-1]
+          
+          @tasks = klass.order('id desc')
+          if params[:day]
+            @tasks = @tasks.where(created_at: "#{params[:day]} 00:00:00".."#{params[:day]} 23:59:59")
+          end
+          
+          if type == 2
+            @tasks = @tasks.where('join_task_count > 0')
+          end
+          
+          render_json(@tasks, API::V1::Entities::CommonTask)
+          
+        end # end get tasks
+      end # end resource
+      
       resource :rom, desc: '数据相关接口' do
         desc "生成返回一条改机数据"
+        params do
+          optional :task_id, type: Integer, desc: '任务ID'
+        end
         post :create_packet do
           carrier_id = ROMUtils.create_carrier_id
           
@@ -52,46 +86,51 @@ module API
             device_info_id: device_info.try(:uniq_id)
           )
           
+          task = NewTask.find_by(uniq_id: params[:task_id])
+          if task.present?
+            NewTaskLog.where(task_id: task.uniq_id, proj_id: task.proj_id, packet_id: @packet.uniq_id).first_or_create!
+          end
+          
           render_json(@packet, API::V1::Entities::Packet)
         end # end create
         
-        desc "上传刷单日志"
-        params do
-          requires :proj_id,  type: Integer, desc: '项目ID'
-          requires :packet_id,type: Integer, desc: '改机数据ID'
-          optional :extras,   type: String,  desc: '额外的数据'
-        end
-        post :upload_log do
-          project = Project.find_by(uniq_id: params[:proj_id])
-          if project.blank?
-            return render_error(4004, '项目不存在')
-          end
-          
-          packet = Packet.find_by(uniq_id: params[:packet_id])
-          if packet.blank?
-            return render_error(4004, '改机数据不存在')
-          end
-          
-          log = TaskLog.create(project_id: project.uniq_id, packet_id: packet.uniq_id, extras_data: params[:extras])
-          if log
-            { code: 0, message: 'ok', data: { log_id: log.uniq_id } }
-          else
-            render_error(-1, '上传失败')
-          end
-          
-        end # end upload_log
-        
-        desc "获取所有留存任务" # 0001, 0002
-        params do
-          optional :day, type: String, desc: '某一天的日期'
-        end
-        get :remain_tasks do
-          @tasks = RemainTask.order('id desc')
-          if params[:day]
-            @tasks = @tasks.where(created_at: "#{params[:day]} 00:00:00".."#{params[:day]} 23:59:59")
-          end
-          render_json(@tasks, API::V1::Entities::RemainTask)
-        end # end
+        # desc "上传刷单日志"
+        # params do
+        #   requires :proj_id,  type: Integer, desc: '项目ID'
+        #   requires :packet_id,type: Integer, desc: '改机数据ID'
+        #   optional :extras,   type: String,  desc: '额外的数据'
+        # end
+        # post :upload_log do
+        #   project = Project.find_by(uniq_id: params[:proj_id])
+        #   if project.blank?
+        #     return render_error(4004, '项目不存在')
+        #   end
+        #
+        #   packet = Packet.find_by(uniq_id: params[:packet_id])
+        #   if packet.blank?
+        #     return render_error(4004, '改机数据不存在')
+        #   end
+        #
+        #   log = TaskLog.create(project_id: project.uniq_id, packet_id: packet.uniq_id, extras_data: params[:extras])
+        #   if log
+        #     { code: 0, message: 'ok', data: { log_id: log.uniq_id } }
+        #   else
+        #     render_error(-1, '上传失败')
+        #   end
+        #
+        # end # end upload_log
+        #
+        # desc "获取所有留存任务" # 0001, 0002
+        # params do
+        #   optional :day, type: String, desc: '某一天的日期'
+        # end
+        # get :remain_tasks do
+        #   @tasks = RemainTask.order('id desc')
+        #   if params[:day]
+        #     @tasks = @tasks.where(created_at: "#{params[:day]} 00:00:00".."#{params[:day]} 23:59:59")
+        #   end
+        #   render_json(@tasks, API::V1::Entities::RemainTask)
+        # end # end
         
         desc "获取某留存任务的一条改机数据"
         params do
@@ -111,7 +150,9 @@ module API
           @log.in_use = true
           @log.save!
           
-          render_json(@log, API::V1::Entities::RemainTaskLog)
+          @log.task.increment_complete_count if @log.task.present?
+          
+          render_json(@log.packet, API::V1::Entities::Packet)
         end
         
         # desc "获取一条某个项目的留存改机数据"

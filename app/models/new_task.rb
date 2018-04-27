@@ -12,6 +12,10 @@ class NewTask < ActiveRecord::Base
     end while self.class.exists?(:uniq_id => uniq_id)
   end
   
+  def increment_complete_count
+    self.class.increment_counter(:complete_count, self.id)
+  end
+  
   def project
     @project ||= Project.find_by(uniq_id: self.proj_id)
   end

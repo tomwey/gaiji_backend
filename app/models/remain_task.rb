@@ -21,15 +21,23 @@ class RemainTask < ActiveRecord::Base
     @project ||= Project.find_by(uniq_id: self.proj_id)
   end
   
+  def task_count
+    [self.need_task_count, self.join_task_count].min
+  end
+  
+  def increment_complete_count
+    self.class.increment_counter(:complete_count, self.id)
+  end
+  
   def generate_remain_tasks!
     # 计算需要加入的任务数
-    total_count = TaskLog.where(created_at: self.task_date.beginning_of_day..self.task_date.end_of_day).count
+    total_count = NewTaskLog.where(created_at: self.task_date.beginning_of_day..self.task_date.end_of_day).count
     need_task_count = self.ratio >= 100 ? total_count : ( (total_count * ratio / 100.0).to_i + 8 ) # 默认多加8个
     
     join_count = 0
     
     # 添加任务
-    @logs = TaskLog.order('RANDOM()').limit(need_task_count)
+    @logs = NewTaskLog.order('RANDOM()').limit(need_task_count)
     @logs.each do |log|
       if RemainTaskLog.create(task_id: self.uniq_id, proj_id: log.project_id, packet_id: log.packet_id)
         join_count = join_count + 1

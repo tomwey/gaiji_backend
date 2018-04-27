@@ -115,6 +115,13 @@ module API
         expose :bundle_id
       end
       
+      class CommonTask < Base
+        expose :uniq_id, as: :id
+        expose :task_count, :complete_count
+        expose :task_date, format_with: :chinese_date
+        expose :project, using: API::V1::Entities::Project
+      end
+      
       class RemainTask < Base
         expose :uniq_id, as: :id
         expose :ratio
