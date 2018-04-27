@@ -46,6 +46,7 @@
       task_log: '任务明细'
       device_info: '设备信息'
       new_task: '刷量任务'
+      new_task_log: '刷量任务明细'
       remain_task: '留存任务'
       remain_task_log: '留存任务明细'
       idcard: '身份证信息'
