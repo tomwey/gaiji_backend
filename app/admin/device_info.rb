@@ -7,6 +7,7 @@ ActiveAdmin.register DeviceInfo do
             ),
             back: {action: :index}
   
+menu parent: 'rom_menu', priority: 1, label: '设备信息'
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
 #

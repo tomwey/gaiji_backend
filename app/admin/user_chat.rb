@@ -7,6 +7,9 @@ ActiveAdmin.register UserChat do
                 force_encoding: :auto
             ),
             back: {action: :index}
+            
+menu parent: 'ds_menu', priority: 3, label: '聊天/评论内容管理'
+
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
 #

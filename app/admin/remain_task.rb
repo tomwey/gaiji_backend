@@ -2,6 +2,9 @@ ActiveAdmin.register RemainTask do
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
 #
+
+menu parent: 'rom_menu', priority: 4, label: '留存任务'
+
 permit_params :proj_id, :ratio, :task_date
 
 index do
@@ -18,6 +21,8 @@ index do
   
   actions defaults: false do |o|
     item "查看", admin_remain_task_path(o)
+    item "编辑", edit_admin_remain_task_path(o)
+    item "删除", admin_remain_task_path(o), method: :delete, data: { confirm: '您确定吗？' }, class: 'btn btn-danger'
     if o.join_task_count > 0
       item "清空已做任务", clear_admin_remain_task_path(o), method: :put, data: { confirm: '你确定吗？' }, class: 'danger'
     else

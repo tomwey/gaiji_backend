@@ -42,9 +42,10 @@
       pay_log: '交易明细'
       area: '区域'
       project: '项目'
-      packet: '改机数据'
+      packet: '设备身份信息'
       task_log: '任务明细'
       device_info: '设备信息'
+      new_task: '刷量任务'
       remain_task: '留存任务'
       remain_task_log: '留存任务明细'
       idcard: '身份证信息'
@@ -259,6 +260,11 @@
         host: 'HOST'
         build_tags: '编译标记'
         incremental: 'Incremental'
+      new_task:
+        task_date: '任务日期'
+        proj_id: '所属项目'
+        task_count: '任务量'
+        complete_count: '完成量'
       remain_task:
         ratio: '留存率'
         task_date: '留存率任务日期'

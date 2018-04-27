@@ -2,6 +2,8 @@ ActiveAdmin.register Project do
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
 #
+menu parent: 'project_menu', priority: 1, label: '项目管理'
+
 permit_params :name, :icon, :bundle_id, :task_count, :task_started_at, :task_desc, :download_urls_val, :opened
 #
 
