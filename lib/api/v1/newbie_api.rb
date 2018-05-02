@@ -24,7 +24,8 @@ module API
         get do
           type = params[:type].to_i
           
-          if type != 1 or type != 2
+          types = %w(1 2)
+          unless types.include?(type.to_s)
             return render_error(-1, '不正确的Type参数')
           end
           
