@@ -29,7 +29,7 @@ module API
             return render_error(-1, '不正确的Type参数')
           end
           
-          task_classes = %w(new_task remain_task)
+          task_classes = %w(NewTask RemainTask)
           
           klass = Object.const_get task_classes[type-1]
           
