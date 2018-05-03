@@ -133,7 +133,7 @@ module API
         expose :uniq_id, as: :id
         expose :project, using: API::V1::Entities::Project
         expose :packet, using: API::V1::Entities::Packet
-        expsoe :task, using: API::V1::Entities::RemainTask
+        expose :task, using: API::V1::Entities::RemainTask
       end
       
       # 红包
