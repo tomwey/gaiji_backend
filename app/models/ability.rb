@@ -14,10 +14,10 @@ class Ability
         admin.id == user.id
       end
       
-      if user.marketer? or user.admin?
-        can :create, GameRecharge
-        can :recharge, GameRecharge
-      end
+      # if user.marketer? or user.admin?
+      #   can :create, GameRecharge
+      #   can :recharge, GameRecharge
+      # end
       
     end
     
