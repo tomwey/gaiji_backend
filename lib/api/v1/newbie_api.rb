@@ -35,7 +35,7 @@ module API
           
           @tasks = klass.order('id desc')
           if params[:day]
-            @tasks = @tasks.where(created_at: "#{params[:day]} 00:00:00".."#{params[:day]} 23:59:59")
+            @tasks = @tasks.where(task_date: params[:day])
           end
           
           if type == 2
