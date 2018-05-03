@@ -13,8 +13,8 @@ module API
         is_api_doc_path = request.path.include? "swagger_doc"
         encode_str = Base64.urlsafe_encode64(SiteConfig.api_key + params[:i].to_s)
         # (Time.now.to_i - params[:i].to_i) > SiteConfig.access_key_expire_in.to_i
-        
-        if is_pro && !is_api_doc_path
+        from_api_doc = request.referer && request.referer.include?('/apidoc')
+        if !from_api_doc && is_pro && !is_api_doc_path
           encode_str = Digest::MD5.hexdigest(SiteConfig.api_key + params[:i].to_s)
           if ( (params[:ak].blank? or params[:i].blank?) or encode_str != params[:ak] or $redis.get('ak_code') == params[:i].to_s )
             error!({"code" => 403, "message" => "没有访问权限"}, 403)
