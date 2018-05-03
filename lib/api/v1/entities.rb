@@ -116,8 +116,16 @@ module API
       end
       
       class CommonTask < Base
-        expose :uniq_id, as: :id
-        expose :task_count, :complete_count
+        # expose :uniq_id, as: :id
+        expose :id do |model, opts|
+          model.uniq_id.to_s
+        end
+        expose :task_count do |model, opts|
+          model.task_count.to_s
+        end
+        expose :complete_count do |model, opts|
+          model.complete_count.try(:to_s)
+        end
         expose :task_date, format_with: :chinese_date
         expose :project, using: API::V1::Entities::Project
       end
