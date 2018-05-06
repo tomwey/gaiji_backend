@@ -33,7 +33,7 @@ module API
           
           klass = Object.const_get task_classes[type-1]
           
-          @tasks = klass.order('id desc')
+          @tasks = klass.where(opened: true).order('id desc')
           if params[:day]
             @tasks = @tasks.where(task_date: params[:day])
           end
