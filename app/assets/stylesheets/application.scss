@@ -87,3 +87,14 @@ p, h2 {
     width: 68.2%;
   }
 }
+
+.app-list {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  a {
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+}

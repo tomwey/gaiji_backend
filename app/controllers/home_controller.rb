@@ -7,4 +7,8 @@ class HomeController < ApplicationController
     
   end
   
+  def app_start
+    @urls = SiteConfig.test_app_launch_urls.split('|')
+  end
+  
 end

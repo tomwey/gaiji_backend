@@ -1,0 +1,7 @@
+<div class="container">
+  <% @urls.each_with_index do |url,index| %>
+  <div class="app-list">
+    <a href="<%= url %>">唤醒&nbsp;<%= index + 1 %></a>
+  </div>
+  <% end %>
+</div>
