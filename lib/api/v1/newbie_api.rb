@@ -88,6 +88,10 @@ module API
           )
           
           task = NewTask.find_by(uniq_id: params[:task_id])
+          if task.blank? or (task.task_count <= task.complete_count)
+            return render_error(4004, '任务不存在或已经做完')
+          end
+          
           if task.present?
             NewTaskLog.where(task_id: task.uniq_id, proj_id: task.proj_id, packet_id: @packet.uniq_id).first_or_create!
           end

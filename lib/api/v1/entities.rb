@@ -119,7 +119,7 @@ module API
         expose :task_completed_count do |model, opts|
           if opts && opts[:opts] && opts[:opts][:task]
             task = opts[:opts][:task]
-            task.complete_count.to_s
+            (task.complete_count + 1).to_s
           else
             "--"
           end
