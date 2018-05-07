@@ -113,6 +113,9 @@ module API
         expose :uniq_id, as: :id
         expose :name
         expose :bundle_id
+        expose :bundle_ids do |model, opts|
+          model.bundle_id ? model.bundle_id.split(',') : []
+        end
       end
       
       class CommonTask < Base

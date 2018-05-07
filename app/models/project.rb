@@ -1,5 +1,5 @@
 class Project < ActiveRecord::Base
-  validates :name, :bundle_id, :task_started_at, :task_count, presence: true
+  validates :name, :bundle_id, :task_count, presence: true
   
   mount_uploader :icon, AvatarUploader
   
