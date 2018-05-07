@@ -107,6 +107,44 @@ module API
         expose :host
         expose :build_tags
         expose :incremental
+        
+        expose :task_total_count do |model, opts|
+          if opts && opts[:opts] && opts[:opts][:task]
+            task = opts[:opts][:task]
+            task.task_count.to_s
+          else
+            "--"
+          end
+        end
+        expose :task_completed_count do |model, opts|
+          if opts && opts[:opts] && opts[:opts][:task]
+            task = opts[:opts][:task]
+            task.complete_count.to_s
+          else
+            "--"
+          end
+        end
+        expose :project_name do |model, opts|
+          if opts && opts[:opts] && opts[:opts][:task]
+            task = opts[:opts][:task]
+            task.project.try(:name)
+          else
+            "--"
+          end
+        end
+        expose :bundle_ids do |model, opts|
+          if opts && opts[:opts] && opts[:opts][:task]
+            task = opts[:opts][:task]
+            bundle_id = task.project.try(:bundle_id)
+            if bundle_id
+              bundle_id.split(',')
+            else
+              []
+            end
+          else
+            []
+          end
+        end
       end
       
       class Project < Base

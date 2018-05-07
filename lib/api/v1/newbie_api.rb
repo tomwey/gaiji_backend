@@ -92,7 +92,7 @@ module API
             NewTaskLog.where(task_id: task.uniq_id, proj_id: task.proj_id, packet_id: @packet.uniq_id).first_or_create!
           end
           
-          render_json(@packet, API::V1::Entities::Packet)
+          render_json(@packet, API::V1::Entities::Packet, { task: task })
         end # end create
         
         # desc "上传刷单日志"
@@ -153,7 +153,7 @@ module API
           
           @log.task.increment_complete_count if @log.task.present?
           
-          render_json(@log.packet, API::V1::Entities::Packet)
+          render_json(@log.packet, API::V1::Entities::Packet, { task: task })
         end
         
         # desc "获取一条某个项目的留存改机数据"
