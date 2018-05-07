@@ -20,6 +20,6 @@ class NewTaskLog < ActiveRecord::Base
   end
   
   def task
-    @task ||= RemainTask.find_by(uniq_id: self.task_id)
+    @task ||= NewTask.find_by(uniq_id: self.task_id)
   end
 end
