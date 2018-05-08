@@ -7,7 +7,7 @@ namespace :spider do
       r = RestClient.post 'http://api.008shenqi.com/api/xtools/x008/device/v1', {time: Time.now.to_i, 
         id: 27266, imei: '714254171108722', ' MANUFACTURER': 'Huawei'}
     
-      # puts r.body
+      puts r.body
       res = JSON.parse(r.body)
 
       model = res["model"]
