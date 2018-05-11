@@ -1,6 +1,6 @@
 ActiveAdmin.register RemainTaskLog do
   
-  menu parent: 'rom_menu', priority: 6, label: '留存任务明细'
+  menu parent: 'rom_menu', priority: 51, label: '留存任务明细'
   
   actions :all, except: [:new, :create, :edit, :update]
 # See permitted parameters documentation:

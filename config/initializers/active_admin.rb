@@ -9,7 +9,7 @@ ActiveAdmin.setup do |config|
   config.namespace :admin do |admin|
     admin.build_menu do |menu|
       menu.add id: 'system',      label: '系统功能',        priority: 2
-      menu.add id: 'project_menu',label: '项目管理',        priority: 3
+      # menu.add id: 'project_menu',label: '项目管理',        priority: 3
       menu.add id: 'ds_menu',     label: '常用数据管理',     priority: 5
       menu.add id: 'rom_menu',    label: '刷机管理',        priority: 6
       # menu.add id: 'game',        label: '游戏管理',        priority: 3

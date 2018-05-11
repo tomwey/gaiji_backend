@@ -2,9 +2,9 @@ ActiveAdmin.register Project do
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
 #
-menu parent: 'project_menu', priority: 1, label: '项目管理'
+menu parent: 'rom_menu', priority: 3, label: '项目管理'
 
-permit_params :name, :icon, :bundle_id, :task_count, :task_started_at, :task_desc, :download_urls_val, :opened
+permit_params :name, :icon, :bundle_id, :task_count, :task_started_at, :task_desc, :download_urls_val, :opened, :awake_urls_val
 #
 
 index do
@@ -15,10 +15,13 @@ index do
   end
   column :name, sortable: false
   column :bundle_id, sortable: false
-  column :task_count
-  column :complete_count
-  column :task_started_at
+  # column :task_count
+  # column :complete_count
+  # column :task_started_at
   column :task_desc
+  column '唤醒地址' do |o|
+    raw o.awake_urls.join('<br>')
+  end
   column :created_at
   actions
 end
@@ -33,6 +36,7 @@ form html: { multipart: true } do |f|
     f.input :icon, hint: '图片格式为：jpg,jpeg,gif,png'
     f.input :task_started_at, as: :string, placeholder: '输入的时间格式为：2017-01-01 12:00'
     f.input :task_desc, as: :text, placeholder: '描述该项目的刷量任务要求等等'
+    f.input :awake_urls_val, as: :text, label: '唤醒地址', placeholder: '多个地址请用【英文逗号(,)，竖线(|)或换行】分隔'
     f.input :download_urls_val, as: :text, label: '项目包下载地址', placeholder: '项目包下载地址或二维码图片地址，多个地址请用英文逗号分隔'
     f.input :opened
     # f.input :body, as: :text, input_html: { class: 'redactor' },

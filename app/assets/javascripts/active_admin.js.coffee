@@ -140,6 +140,8 @@ $(document).ready ->
 
   Redbag.showEventInputs(true)
   
+  $('#project_awake_urls_val').text($('#project_awake_urls_val').text())
+  
   Redpack.showCashHBConfig($('#redpack-send-configs').data('is-cash') == 1)
   
   Partin.showShareConfig($('#partin-share-configs').data('need-share') == 1)

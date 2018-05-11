@@ -24,4 +24,15 @@ class Project < ActiveRecord::Base
     return self.download_urls.join(',') if self.download_urls.present?
     return nil
   end
+  
+  def awake_urls_val=(val)
+    if val.present?
+      self.awake_urls = val.split(/(?:\n\r?|\r\n?|\||\,)/)#.map { |s| s.gsub(/\s+/, '') }
+    end
+  end
+  
+  def awake_urls_val
+    return self.awake_urls.join(',') if self.awake_urls.any?
+    return nil
+  end
 end

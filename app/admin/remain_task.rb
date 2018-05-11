@@ -3,7 +3,7 @@ ActiveAdmin.register RemainTask do
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
 #
 
-menu parent: 'rom_menu', priority: 4, label: '留存任务'
+menu parent: 'rom_menu', priority: 5, label: '留存任务'
 
 permit_params :proj_id, :ratio, :task_date, :opened
 

@@ -49,6 +49,8 @@
       new_task_log: '刷量任务明细'
       remain_task: '留存任务'
       remain_task_log: '留存任务明细'
+      awake_task: '唤醒任务'
+      awake_task_log: '唤醒任务明细'
       idcard: '身份证信息'
       user_nickname: '用户昵称信息'
       user_chat: '聊天/评论'
@@ -272,6 +274,13 @@
         proj_id: '所属项目'
         need_task_count: '需要任务数'
         join_task_count: '已经加入的任务数'
+      awake_task:
+        task_date: '任务日期'
+        proj_id: '所属项目'
+        task_count: '任务量'
+        complete_count: '完成量'
+        opened: '是否开启'
+        sort: '显示顺序'
       idcard:
         name: '姓名'
         card_no: '身份证号'

@@ -1,8 +1,8 @@
-ActiveAdmin.register NewTask do
+ActiveAdmin.register AwakeTask do
   
-  menu parent: 'rom_menu', priority: 4, label: '刷量任务'
+  menu parent: 'rom_menu', priority: 6, label: '唤醒任务'
 
-  permit_params :proj_id, :task_count, :task_date, :opened
+  permit_params :proj_id, :task_count, :task_date, :opened, :sort
 
   index do
     selectable_column
@@ -16,11 +16,11 @@ ActiveAdmin.register NewTask do
     column :created_at
   
     actions defaults: false do |o|
-      item "查看", admin_new_task_path(o)
-      item "编辑", edit_admin_new_task_path(o)
-      item "删除", admin_new_task_path(o), method: :delete, data: { confirm: '您确定吗？' }, class: 'btn btn-danger'
+      item "查看", admin_awake_task_path(o)
+      item "编辑", edit_admin_awake_task_path(o)
+      item "删除", admin_awake_task_path(o), method: :delete, data: { confirm: '您确定吗？' }, class: 'btn btn-danger'
       if o.complete_count > 0
-        item "清空已做任务", clear_admin_new_task_path(o), method: :put, data: { confirm: '你确定吗？' }, class: 'danger'
+        item "清空已做任务", clear_admin_awake_task_path(o), method: :put, data: { confirm: '你确定吗？' }, class: 'danger'
       end
     end
   end
@@ -45,6 +45,7 @@ ActiveAdmin.register NewTask do
       f.input :task_count, placeholder: '任务量'
       f.input :task_date, as: :string, placeholder: '例如：2018-01-10', hint: '任务开始日期'
       f.input :opened, label: '是否开启'
+      f.input :sort, label: '显示顺序', hint: '数字越大越靠前'
     end
     actions
   end

@@ -1,5 +1,5 @@
-class NewTask < ActiveRecord::Base
-  validates :task_count, :task_date, :proj_id, presence: true
+class AwakeTask < ActiveRecord::Base
+  validates :task_count, :proj_id, presence: true
   
   before_create :generate_unique_id
   def generate_unique_id

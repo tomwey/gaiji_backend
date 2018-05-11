@@ -1,6 +1,6 @@
-ActiveAdmin.register NewTaskLog do
+ActiveAdmin.register AwakeTaskLog do
   
-  menu parent: 'rom_menu', priority: 41, label: '刷量任务明细'
+  menu parent: 'rom_menu', priority: 61, label: '唤醒任务明细'
   
   actions :all, except: [:new, :create, :edit, :update]
 # See permitted parameters documentation:
