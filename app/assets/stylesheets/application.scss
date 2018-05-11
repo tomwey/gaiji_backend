@@ -111,3 +111,17 @@ p, h2 {
     text-align: right;
   }
 }
+
+.reload-btn {
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+  position: fixed;
+  right: 20px;
+  bottom: 88px;
+  background-color: red;
+  border-radius: 50%;
+  color: white;
+  text-align: center;
+  cursor:pointer;
+}

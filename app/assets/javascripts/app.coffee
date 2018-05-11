@@ -11,14 +11,18 @@ window.App =
   openAwakeUrl: (el) ->
     $el = $(el)
     # alert($el.attr('href'))
+    taskid = $el.data('taskid')
+    url = $el.data('url')
+    # window.location.reload(true)
+    
     $.ajax
-      url: "/awake_tasks/#{$el.data('taskid')}/upload_log"
+      url: "/awake_tasks/#{taskid}/upload_log"
       type: 'POST'
-      data: { source: $el.data('url') }
+      data: { source: url }
       success: (re) ->
-        window.location.href = $el.data('url')
+        window.location.href = url
       error: (err) ->
-        window.location.href = $el.data('url')
+        window.location.href = url
     
   changeMoney: (el) -> 
     val = $(el).val()
