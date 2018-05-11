@@ -7,6 +7,19 @@ window.App =
       
   selectMoney: (money) -> 
     $('#current-money').text(money)
+  
+  openAwakeUrl: (el) ->
+    $el = $(el)
+    # alert($el.attr('href'))
+    $.ajax
+      url: "/awake_tasks/#{$el.data('taskid')}/upload_log"
+      type: 'POST'
+      data: { source: $el.data('url') }
+      success: (re) ->
+        window.location.href = $el.data('url')
+      error: (err) ->
+        window.location.href = $el.data('url')
+    
   changeMoney: (el) -> 
     val = $(el).val()
     reg = /^[0-9]*[1-9][0-9]*$/

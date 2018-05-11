@@ -1,7 +1,16 @@
 <div class="container">
-  <% @urls.each_with_index do |url,index| %>
+  <% @tasks.each do |task| %>
   <div class="app-list">
-    <a href="<%= url %>">唤醒&nbsp;<%= index + 1 %></a>
+    <a onclick="App.openAwakeUrl(this)" data-url="<%= task.awake_url %>" data-taskid="<%= task.uniq_id %>">
+      <div class="row">
+        <div class="col-xs-8" style="text-align:left">
+          <%= task.project_name %>
+        </div>
+        <div class="col-xs-4" style="text-align:right">
+          <%= task.complete_count %>&nbsp;/&nbsp;<%= task.task_count %>
+        </div>
+      </div>
+    </a>
   </div>
   <% end %>
 </div>

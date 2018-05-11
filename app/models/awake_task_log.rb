@@ -20,6 +20,6 @@ class AwakeTaskLog < ActiveRecord::Base
   end
   
   def task
-    @task ||= NewTask.find_by(uniq_id: self.task_id)
+    @task ||= AwakeTask.find_by(uniq_id: self.task_id)
   end
 end

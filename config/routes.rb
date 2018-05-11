@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   get 'install' => 'home#install'
   
   get 'app/start' => 'home#app_start'
-  
+  post 'awake_tasks/:task_id/upload_log' => 'home#upload_awake_task_log'
   # 网页文档
   resources :pages, path: :p, only: [:show]
   

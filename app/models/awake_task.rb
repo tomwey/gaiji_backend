@@ -13,11 +13,25 @@ class AwakeTask < ActiveRecord::Base
   end
   
   def increment_complete_count
+    puts '+++++'
     self.class.increment_counter(:complete_count, self.id)
   end
   
   def project
     @project ||= Project.find_by(uniq_id: self.proj_id)
+  end
+  
+  def project_name
+    project.try(:name)
+  end
+  
+  def awake_url
+    urls = project.try(:awake_urls)
+    if urls.blank? or urls.empty?
+      return ''
+    end
+    
+    return urls.sample
   end
   
   # 清空已做任务
