@@ -2,7 +2,7 @@ ActiveAdmin.register NewTask do
   
   menu parent: 'rom_menu', priority: 4, label: '刷量任务'
 
-  permit_params :proj_id, :task_count, :task_date, :opened
+  permit_params :proj_id, :task_count, :task_date, :opened, :task_type
 
   index do
     selectable_column
@@ -13,6 +13,9 @@ ActiveAdmin.register NewTask do
     column :task_count
     column :complete_count
     column :task_date
+    column '任务类型' do |o|
+      o.task_type_name
+    end
     column :created_at
   
     actions defaults: false do |o|
@@ -43,6 +46,7 @@ ActiveAdmin.register NewTask do
     f.inputs '基本信息' do
       f.input :proj_id, as: :select, label: '所属项目', collection: Project.where(opened: true).map { |p| [p.name, p.uniq_id] }, prompt: '-- 选择项目 --', required: true
       f.input :task_count, placeholder: '任务量'
+      f.input :task_type, as: :select, label: '任务类型', collection: NewTask::TASK_TYPEs, required: true
       f.input :task_date, as: :string, placeholder: '例如：2018-01-10', hint: '任务开始日期'
       f.input :opened, label: '是否开启'
     end

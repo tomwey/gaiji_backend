@@ -157,7 +157,7 @@ module API
           
           @log.task.increment_complete_count if @log.task.present?
           
-          render_json(@log.packet, API::V1::Entities::Packet, { task: task })
+          render_json(@log.packet, API::V1::Entities::Packet, { task: task, extra_data: @log.extra_data })
         end
         
         # desc "获取一条某个项目的留存改机数据"

@@ -42,7 +42,7 @@ class RemainTask < ActiveRecord::Base
     
     # 添加任务
     @logs.each do |log|
-      if RemainTaskLog.create(task_id: self.uniq_id, proj_id: log.proj_id, packet_id: log.packet_id)
+      if RemainTaskLog.create(task_id: self.uniq_id, proj_id: log.proj_id, packet_id: log.packet_id, extra_data: log.extra_data)
         join_count = join_count + 1
       end
     end

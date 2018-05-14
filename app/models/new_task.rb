@@ -1,6 +1,6 @@
 class NewTask < ActiveRecord::Base
   validates :task_count, :task_date, :proj_id, presence: true
-  
+    
   before_create :generate_unique_id
   def generate_unique_id
     begin
@@ -25,6 +25,17 @@ class NewTask < ActiveRecord::Base
     NewTaskLog.where(task_id: self.uniq_id).delete_all
     self.complete_count = 0
     self.save!
+  end
+  
+  TASK_TYPEs = [['默认', 0], ['唤醒', 1]]
+  def task_type_name
+    if self.task_type == 0
+      return '默认'
+    elsif self.task_type == 1
+      return '唤醒'
+    else
+      return '未知任务'
+    end
   end
   
 end

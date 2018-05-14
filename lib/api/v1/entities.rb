@@ -145,6 +145,20 @@ module API
             []
           end
         end
+        expose :app_url do |model, opts|
+          if opts && opts[:opts] && opts[:opts][:extra_data]
+            opts[:opts][:extra_data]
+          else
+            ""
+          end
+        end
+        expose :extra_data do |model, opts|
+          if opts && opts[:opts] && opts[:opts][:extra_data]
+            opts[:opts][:extra_data]
+          else
+            ""
+          end
+        end
       end
       
       class Project < Base
