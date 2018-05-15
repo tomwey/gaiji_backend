@@ -8,7 +8,7 @@ class HomeController < ApplicationController
   end
   
   def app_start
-    @tasks = NewTask.where(opened: true, task_type: 1).where('task_count != 0 and task_count > complete_count').order('sort desc, id desc')
+    @tasks = NewTask.where(opened: true, task_type: 1).where('task_count != 0 and task_count > complete_count').order('id desc')
   end
   
   def upload_awake_task_log

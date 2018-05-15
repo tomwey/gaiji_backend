@@ -38,4 +38,13 @@ class NewTask < ActiveRecord::Base
     end
   end
   
+  def awake_url
+    urls = project.try(:awake_urls)
+    if urls.blank? or urls.empty?
+      return ''
+    end
+    
+    return urls.sample
+  end
+  
 end
