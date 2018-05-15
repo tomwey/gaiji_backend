@@ -20,10 +20,14 @@ class HomeController < ApplicationController
     else
       # TODO: 每次取最新的一条数据进行操作，因为默认是先改机再进行APP唤醒
       log = NewTaskLog.where(task_id: task.uniq_id).order('created_at desc').first
-      log.extra_data = params[:source]
-      log.save!
-      # AwakeTaskLog.create!(task_id: task.uniq_id, proj_id: task.project.try(:uniq_id), awake_source: params[:source])
-      re = 1
+      if log.blank?
+        re = 4004
+      else        
+        log.extra_data = params[:source]
+        log.save!
+        # AwakeTaskLog.create!(task_id: task.uniq_id, proj_id: task.project.try(:uniq_id), awake_source: params[:source])
+        re = 1
+      end
     end
     render text: re
     
