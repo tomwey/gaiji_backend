@@ -47,4 +47,8 @@ class NewTask < ActiveRecord::Base
     return urls.sample
   end
   
+  def project_name
+    project.try(:name)
+  end
+  
 end
