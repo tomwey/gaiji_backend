@@ -16,4 +16,25 @@ ActiveAdmin.register RemainTaskLog do
 #   permitted
 # end
 
+index do
+  selectable_column
+  column('ID', :id)
+  column '流水号', :uniq_id
+  column '项目/任务' do |o|
+    raw("#{o.project.try(:name)}<br>#{o.task.try(:name)}")
+  end
+  column '是否已做' do |o|
+    o.in_use ? '已做' : '未做'
+  end
+  column '设备身份信息' do |o|
+    o.packet.blank? ? '--' : link_to(o.packet.imei, [:admin, o.packet])
+  end
+  column '附加数据' do |o|
+    o.extra_data
+  end
+  column 'at', :created_at
+  actions
+  
+end
+
 end
