@@ -11,6 +11,11 @@ class HomeController < ApplicationController
     @tasks = NewTask.where(opened: true, task_type: 1).where('task_count != 0 and task_count > complete_count').order('id desc')
   end
   
+  def get_mobile
+    tel = ROMUtils.create_tel_number
+    render text: tel
+  end
+  
   def upload_awake_task_log
     task_id = params[:task_id]
     task = NewTask.find_by(uniq_id: task_id)

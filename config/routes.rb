@@ -9,6 +9,9 @@ Rails.application.routes.draw do
   
   get 'app/start' => 'home#app_start'
   post 'awake_tasks/:task_id/upload_log' => 'home#upload_awake_task_log'
+  
+  get 'util/mobile' => 'home#get_mobile'
+  
   # 网页文档
   resources :pages, path: :p, only: [:show]
   
