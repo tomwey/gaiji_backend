@@ -3,6 +3,14 @@ module API
   module V1
     class NewbieAPI < Grape::API
       
+      resource :data, desc: '获取基本数据接口' do
+        desc "获取手机号"
+        get :mobile do
+          tel = ROMUtils.create_tel_number
+          { tel: tel.to_s }
+        end # end get mobile
+      end
+      
       resource :projects, desc: '项目相关接口' do
         desc "获取某个项目的下载地址或下载二维码图片地址"
         get '/:id/download_urls' do
