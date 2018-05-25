@@ -57,7 +57,7 @@ form html: { multipart: true } do |f|
   f.semantic_errors
   
   f.inputs '基本信息' do
-    f.input :proj_id, as: :select, label: '所属项目', collection: Project.where(opened: true).map { |p| [p.name, p.uniq_id] }, prompt: '-- 选择项目 --', required: true
+    f.input :proj_id, as: :select, label: '所属项目', collection: Project.where(opened: true).order('created_at desc').map { |p| [p.name, p.uniq_id] }, prompt: '-- 选择项目 --', required: true
     f.input :ratio, placeholder: '留存率整数值，例如：留存80%，那么填入值80'
     f.input :task_date, as: :string, placeholder: '例如：2018-01-10', hint: '对应留存率的刷单日期'
     f.input :opened, label: '是否开启'
