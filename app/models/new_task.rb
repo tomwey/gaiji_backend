@@ -51,4 +51,15 @@ class NewTask < ActiveRecord::Base
     project.try(:name)
   end
   
+  def portal_urls_val=(val)
+    if val.present?
+      self.portal_urls = val.split(/(?:\n\r?|\r\n?|\||\,)/)#.map { |s| s.gsub(/\s+/, '') }
+    end
+  end
+  
+  def portal_urls_val
+    return self.portal_urls.join(',') if self.portal_urls.any?
+    return nil
+  end
+  
 end

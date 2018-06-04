@@ -2,7 +2,7 @@ ActiveAdmin.register NewTask do
   
   menu parent: 'rom_menu', priority: 4, label: '刷量任务'
 
-  permit_params :proj_id, :task_count, :task_date, :opened, :task_type
+  permit_params :proj_id, :task_count, :task_date, :opened, :task_type, :portal_urls_val
 
   index do
     selectable_column
@@ -49,6 +49,7 @@ ActiveAdmin.register NewTask do
       f.input :task_type, as: :select, label: '任务类型', collection: NewTask::TASK_TYPEs, required: true
       f.input :task_date, as: :string, placeholder: '例如：2018-01-10', hint: '任务开始日期'
       f.input :opened, label: '是否开启'
+      f.input :portal_urls_val, as: :text, label: '该任务入口地址', placeholder: '多个地址请用英文逗号(,)或竖线(|)分隔'
     end
     actions
   end
