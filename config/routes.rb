@@ -12,6 +12,10 @@ Rails.application.routes.draw do
   
   get 'util/mobile' => 'home#get_mobile'
   
+  # /task/url?id=484848844
+  get 'task/url'    => 'home#get_task_url'
+  post 'task/upload_log' => 'home#upload_task_log'
+  
   # 网页文档
   resources :pages, path: :p, only: [:show]
   

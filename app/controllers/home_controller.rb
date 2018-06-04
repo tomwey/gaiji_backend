@@ -16,6 +16,32 @@ class HomeController < ApplicationController
     render text: tel
   end
   
+  def get_task_url
+    @task = NewTask.find_by(uniq_id: params[:id])
+    if @task.blank?
+      render text: 'Not found', status: 404, layout: false
+      return
+    end
+    
+    render text: @task.portal_urls.sample
+  end
+  
+  # post /task/upload_log
+  # id=39393838&source=http://www.baidu.com&extra_data=13684043430
+  def upload_task_log
+    task_id = params[:task_id]
+    task = NewTask.find_by(uniq_id: task_id)
+    
+    if task.blank?
+      render text: 'Not found', status: 404, layout: false
+      return
+    end
+    
+    TaskSourceLog.create!(task_id:task.uniq_id, source: params[:source], extra_data: params[:extra])
+    
+    render text: '1'
+  end
+  
   def upload_awake_task_log
     task_id = params[:task_id]
     task = NewTask.find_by(uniq_id: task_id)
