@@ -1,4 +1,6 @@
 class HomeController < ApplicationController
+  skip_before_filter :verify_authenticity_token, :only => [:upload_task_log]
+  
   def error_404
     render text: 'Not found', status: 404, layout: false
   end
