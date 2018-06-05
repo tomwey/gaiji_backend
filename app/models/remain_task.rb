@@ -31,10 +31,10 @@ class RemainTask < ActiveRecord::Base
   
   def generate_remain_tasks!
     # 计算需要加入的任务数
-    total_count = NewTaskLog.where(proj_id: self.proj_id).where(created_at: self.task_date.beginning_of_day..self.task_date.end_of_day).count
+    total_count = NewTaskLog.where(proj_id: self.proj_id, visible: true).where(created_at: self.task_date.beginning_of_day..self.task_date.end_of_day).count
     need_task_count = self.ratio >= 100 ? total_count : ( (total_count * ratio / 100.0).to_i + 8 ) # 默认多加8个
     
-    @logs = NewTaskLog.where(proj_id: self.proj_id)
+    @logs = NewTaskLog.where(proj_id: self.proj_id, visible: true)
               .where(created_at: self.task_date.beginning_of_day..self.task_date.end_of_day)
               .order('RANDOM()').limit(need_task_count)
     

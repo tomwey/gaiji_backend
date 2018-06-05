@@ -22,7 +22,7 @@ class NewTask < ActiveRecord::Base
   
   # 清空已做任务
   def clear_completed_tasks!
-    NewTaskLog.where(task_id: self.uniq_id).delete_all
+    NewTaskLog.where(task_id: self.uniq_id).update_all(visible: false)
     self.complete_count = 0
     self.save!
   end
