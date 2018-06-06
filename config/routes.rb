@@ -16,6 +16,8 @@ Rails.application.routes.draw do
   get 'task/url'    => 'home#get_task_url'
   post 'task/upload_log' => 'home#upload_task_log'
   
+  get '/export/csv' => 'home#export_csv'
+  
   # 网页文档
   resources :pages, path: :p, only: [:show]
   

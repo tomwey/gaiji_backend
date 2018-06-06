@@ -28,6 +28,19 @@ class HomeController < ApplicationController
     render text: @task.portal_urls.sample
   end
   
+  def export_csv
+    if params[:url].blank?
+      render text: 'Not Found', status: 404
+      return
+    end
+    _,suffix = params[:url].split('?')
+    @data = TaskSourceLog.where(source: params[:url]).order('id desc')
+    
+    respond_to do |format|
+      format.csv { send_data @data.to_csv, filename: "#{suffix}.csv" }
+    end
+  end
+  
   # post /task/upload_log
   # id=39393838&source=http://www.baidu.com&extra_data=13684043430
   def upload_task_log
