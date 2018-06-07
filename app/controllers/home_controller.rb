@@ -42,7 +42,7 @@ class HomeController < ApplicationController
     end
     
     respond_to do |format|
-      format.csv { send_data @data.to_csv, filename: "#{suffix}.csv" }
+      format.csv { send_data @data.to_csv, filename: "#{params[:date]}_#{suffix}.csv" }
     end
   end
   
