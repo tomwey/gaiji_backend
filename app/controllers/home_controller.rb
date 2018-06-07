@@ -33,8 +33,13 @@ class HomeController < ApplicationController
       render text: 'Not Found', status: 404
       return
     end
+    
     _,suffix = params[:url].split('?')
+    
     @data = TaskSourceLog.where(source: params[:url]).order('id desc')
+    if params[:date]
+      @data = @data.where('DATE(created_at) = ?', params[:date])
+    end
     
     respond_to do |format|
       format.csv { send_data @data.to_csv, filename: "#{suffix}.csv" }
