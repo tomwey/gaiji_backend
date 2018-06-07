@@ -12,4 +12,10 @@ ActiveAdmin.register TaskSourceLog do
 #   permitted
 # end
 
+  controller do
+    def scoped_collection
+      end_of_association_chain.where(visible: true)
+    end
+  end
+
 end
