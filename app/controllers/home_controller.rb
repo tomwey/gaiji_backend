@@ -36,6 +36,8 @@ class HomeController < ApplicationController
     
     _,suffix = params[:url].split('?')
     
+    _,suffix = suffix.split('=')
+    
     @data = TaskSourceLog.where(source: params[:url]).order('id desc')
     if params[:date]
       @data = @data.where('DATE(created_at) = ?', params[:date])
