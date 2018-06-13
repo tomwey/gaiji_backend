@@ -13,4 +13,5 @@ class Device < ActiveRecord::Base
   def fingerprint
     "#{self.brand}/#{self.product}/#{self.device}/#{self.board}:#{self.release}/#{self.product_id}/#{self.sdk_incremental}:#{self.product_id}/#{self.tags}"
   end
+  
 end
