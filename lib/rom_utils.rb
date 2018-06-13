@@ -31,6 +31,28 @@ class ROMUtils
     return tel
   end
   
+  def self.create_tel_number_for(carrier_id)
+    zgyd = %w(134 135 136 137 138 139 150 151 152 157 158 159 182 183 187 188)
+    zglt = %w(130 131 132 155 156 185 186)
+    zgdx = %w(133 153 173 177 180 181 189)
+    
+    tel_prefix = if carrier_id == '46000' || carrier_id == '46002'
+      zgyd.sample
+    elsif carrier_id == '46001'
+      zglt.sample
+    elsif carrier_id == '46003'
+      zgdx.sample
+    else
+      ''
+    end
+    
+    if tel_prefix.blank?
+      return ''
+    else
+      return tel_prefix + rand.to_s[2..9]
+    end
+  end
+  
   def self.create_carrier_id
     ids = %w(46000 46001 46002 46003)
     return ids[rand(0...ids.length)]

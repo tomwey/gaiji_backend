@@ -133,7 +133,7 @@ module API
             sim_serial: ROMUtils.create_sim_serial,
             imsi: ROMUtils.create_imsi_for(carrier_id),
             sim_country: 'cn',
-            phone_number: ROMUtils.create_tel_number,
+            phone_number: ROMUtils.create_tel_number_for(carrier_id),
             carrier_id: carrier_id,
             # carrier_name: ROMUtils.create_carrier_name_for(carrier_id),
             carrier_name: ROMUtils.create_carrier_name_for(carrier_id),
