@@ -8,8 +8,21 @@ class ROMUtils
   end
   
   def self.create_imei
-    prefix = rand(1...10).to_s
-    return prefix + rand.to_s[2..8] + rand.to_s[2..8]
+    prefix = %w(35 86).sample
+    digits14 = prefix + 12.times.map{rand(10)}.join
+    
+    # 生成校验位
+    digit15 = 0
+    14.times do |n|
+      if n % 2 == 0
+        digit15 = digit15 + digits14[n].to_i
+      else
+        digit15 = digit15 + (digits14[n].to_i * 2) % 10 + (digits14[n].to_i * 2) / 10
+      end
+    end
+    digit15 = digit15 % 10
+    
+    return digits14 + digit15.to_s
   end
   
   def self.create_sim_serial
