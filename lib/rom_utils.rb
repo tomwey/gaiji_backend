@@ -1,6 +1,6 @@
 class ROMUtils
   def self.create_serial
-    return SecureRandom.hex(4)
+    return SecureRandom.hex(6).upcase
   end
   
   def self.create_android_id
@@ -14,6 +14,20 @@ class ROMUtils
   
   def self.create_sim_serial
     return SecureRandom.hex(10)
+  end
+  
+  def self.create_sim_serial_for(carrier_id)
+    if carrier_id == '46000' || carrier_id == '46002'
+      prefix = '898600'
+    elsif carrier_id == '46001'
+      prefix = '898601'
+    elsif carrier_id == '46003'
+      prefix = '898603'
+    else
+      prefix = '898600'
+    end
+    
+    return prefix + rand.to_s[2..8] + rand.to_s[2..8]
   end
   
   def self.create_imsi_for(carrier_id)
@@ -70,16 +84,22 @@ class ROMUtils
     end
   end
   
+  def self.create_local_ip
+    prefix = ['192.168', '10.1', '10.19'].sample
+    suffix = ".%d.%d" % [rand(0...100), rand(2...255)]
+    return prefix + suffix
+  end
+  
   def self.create_network_type
     return rand(0...15).to_s
   end
   
   def self.create_phone_type
-    return rand(0...2).to_s
+    return rand(0..2).to_s
   end
   
   def self.create_sim_state
-    return rand(0...5).to_s
+    return '1'#rand(0...5).to_s
   end
   
   def self.create_mac_addr
@@ -95,7 +115,15 @@ class ROMUtils
   end
   
   def self.create_wifi_name
-    return SecureRandom.hex(5)
+    type_1_prefix = %w(TP-Link_ Tenda_ MERCURY_ ChinaNet_)
+    type_2_words = %w(rjxcg 最好的 loving 很不错哦 别偷网 relax-ChinaNet- closet danger peephole digital happy918 sunny cover waiter starbucks captialmall zjnb sfdc perfume-lean Levic VeryDD hencuocou useful-shower roast)
+    n = rand(20)
+    if n > 12
+      return type_2_words.sample
+    else
+      type_1_prefix.sample + SecureRandom.hex(3)
+    end
+    # return SecureRandom.hex(5)
   end
   
   def self.create_os_info

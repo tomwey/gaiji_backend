@@ -91,6 +91,8 @@ module API
         expose :screen_size # 分辨率
         expose :screen_dpi
         
+        expose :local_ip
+        
         expose :board
         expose :brand
         expose :cpu

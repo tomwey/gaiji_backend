@@ -22,6 +22,10 @@ class Packet < ActiveRecord::Base
     device_info.try(:brand)
   end
   
+  def local_ip
+    ROMUtils.create_local_ip
+  end
+  
   def cpu
     device_info.try(:cpu)
   end
