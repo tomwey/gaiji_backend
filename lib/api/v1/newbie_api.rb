@@ -92,7 +92,9 @@ module API
             sdk_int: sdk,
             screen_size: screen,
             screen_dpi: dpi,
-            device_info_id: device_info.try(:uniq_id)
+            device_info_id: device_info.try(:uniq_id),
+            device_info_type: 'DeviceInfo',
+            local_ip: ROMUtils.create_local_ip
           )
           
           task = NewTask.find_by(uniq_id: params[:task_id])
@@ -124,6 +126,40 @@ module API
           device = Device.order("RANDOM()").first
           
           carrier_id = ROMUtils.create_carrier_id
+          
+          @packet = Packet.create!(
+            serial: ROMUtils.create_serial,
+            android_id: ROMUtils.create_android_id,
+            imei: ROMUtils.create_imei,
+            sim_serial: ROMUtils.create_sim_serial_for(carrier_id),
+            imsi: ROMUtils.create_imsi_for(carrier_id),
+            sim_country: ROMUtils.create_sim_country,
+            phone_number: ROMUtils.create_tel_number_for(carrier_id),
+            carrier_id: carrier_id,
+            carrier_name: ROMUtils.create_carrier_name_for(carrier_id),
+            network_type: ROMUtils.create_network_type,
+            phone_type: ROMUtils.create_phone_type,
+            sim_state: ROMUtils.create_sim_state,
+            mac_addr: ROMUtils.create_mac_addr,
+            bluetooth_mac: ROMUtils.create_bluetooth_mac,
+            wifi_mac: ROMUtils.create_wifi_mac,
+            wifi_name: ROMUtils.create_wifi_name,
+            os_version: device.release,
+            sdk_value: device.sdk_val,
+            sdk_int: device.sdk_int,
+            screen_size: device.resolution.gsub('x', '*'),
+            screen_dpi: device.dpi,
+            device_info_id: device.try(:uniq_id),
+            device_info_type: 'Device',
+            local_ip: ROMUtils.create_local_ip
+          )
+          
+          if task.present?
+            NewTaskLog.where(task_id: task.uniq_id, proj_id: task.proj_id, packet_id: @packet.uniq_id).first_or_create!
+          end
+          
+          render_json(@packet, API::V1::Entities::Packet, { task: task })
+          
           
           data = {
             id: 1,
@@ -183,50 +219,11 @@ module API
             extra_data: ""
           }
           
-          { code: 0, message: 'ok', data: data }
           
-          # os_info = ROMUtils.create_os_info
-          # ver,sdk = os_info.split(',')
-          #
-          # screen,dpi = ROMUtils.create_screen_size
-          #
-          # device_info = DeviceInfo.order("RANDOM()").first
-          #
-          # @packet = Packet.create!(
-          #   serial: ROMUtils.create_serial,
-          #   android_id: ROMUtils.create_android_id,
-          #   imei: ROMUtils.create_imei,
-          #   sim_serial: ROMUtils.create_sim_serial,
-          #   imsi: ROMUtils.create_imsi_for(carrier_id),
-          #   sim_country: ROMUtils.create_sim_country,
-          #   phone_number: ROMUtils.create_tel_number,
-          #   carrier_id: carrier_id,
-          #   carrier_name: ROMUtils.create_carrier_name_for(carrier_id),
-          #   network_type: ROMUtils.create_network_type,
-          #   phone_type: ROMUtils.create_phone_type,
-          #   sim_state: ROMUtils.create_sim_state,
-          #   mac_addr: ROMUtils.create_mac_addr,
-          #   bluetooth_mac: ROMUtils.create_bluetooth_mac,
-          #   wifi_mac: ROMUtils.create_wifi_mac,
-          #   wifi_name: ROMUtils.create_wifi_name,
-          #   os_version: ver,
-          #   sdk_value: sdk,
-          #   sdk_int: sdk,
-          #   screen_size: screen,
-          #   screen_dpi: dpi,
-          #   device_info_id: device_info.try(:uniq_id)
-          # )
-          #
-          # task = NewTask.find_by(uniq_id: params[:task_id])
-          # if task.blank? or (task.task_count <= task.complete_count)
-          #   return render_error(4004, '任务不存在或已经做完')
-          # end
-          #
-          # if task.present?
-          #   NewTaskLog.where(task_id: task.uniq_id, proj_id: task.proj_id, packet_id: @packet.uniq_id).first_or_create!
-          # end
-          #
-          # render_json(@packet, API::V1::Entities::Packet, { task: task })
+          
+          # { code: 0, message: 'ok', data: data }
+          
+          
         end # end create
         
         # desc "上传刷单日志"

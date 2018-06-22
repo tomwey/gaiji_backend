@@ -97,18 +97,27 @@ module API
         expose :brand
         expose :cpu
         expose :cpu2
+        expose :abi
+        expose :abi2
         expose :device
         expose :display
         expose :fingerprint
         expose :hardware
         expose :product_model
+        expose :product_id
+        expose :product_type
         expose :manufacturer
         expose :model
         expose :product
         expose :bootloader
         expose :host
+        expose :tags
+        expose :user
+        expose :firmware
+        expose :radio_version
         expose :build_tags
         expose :incremental
+        expose :sdk_incremental
         
         expose :task_total_count do |model, opts|
           if opts && opts[:opts] && opts[:opts][:task]

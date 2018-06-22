@@ -11,27 +11,36 @@ class Packet < ActiveRecord::Base
   end
   
   def device_info
-    @device_info ||= DeviceInfo.find_by(uniq_id: self.device_info_id)
+    klass = Object.const_get self.device_info_type
+    @device_info ||= klass.find_by(uniq_id: self.device_info_id)
   end
   
   def board
-    device_info.try(:board)
+    device_info.try(:board) || ''
   end
   
   def brand
-    device_info.try(:brand)
+    device_info.try(:brand) || ''
   end
   
   def local_ip
-    ROMUtils.create_local_ip
+    self[:local_ip] || ROMUtils.create_local_ip
   end
   
   def cpu
-    device_info.try(:cpu)
+    device_info.try(:cpu) || ''
   end
   
   def cpu2
-    device_info.try(:cpu2)
+    device_info.try(:cpu2) || device_info.try(:abi) || ''
+  end
+  
+  def abi
+    device_info.try(:abi) || ''
+  end
+  
+  def abi2
+    device_info.try(:abi2) || ''
   end
   
   def device
@@ -54,6 +63,14 @@ class Packet < ActiveRecord::Base
     device_info.try(:product_model)
   end
   
+  def product_id
+    device_info.try(:product_id)
+  end
+  
+  def product_type
+    device_info.try(:product_type)
+  end
+  
   def manufacturer
     device_info.try(:manufacturer)
   end
@@ -74,12 +91,32 @@ class Packet < ActiveRecord::Base
     device_info.try(:host)
   end
   
+  def tags
+    device_info.try(:tags)
+  end
+  
+  def user
+    device_info.try(:user)
+  end
+  
+  def firmware
+    device_info.try(:firmware) || device_info.try(:radio_version)
+  end
+  
+  def radio_version
+    self.firmware
+  end
+  
   def build_tags
-    device_info.try(:build_tags)
+    device_info.try(:build_tags) || self.tags
   end
   
   def incremental
     device_info.try(:incremental)
+  end
+  
+  def sdk_incremental
+    self.incremental || device_info.try(:sdk_incremental)
   end
   
 end
