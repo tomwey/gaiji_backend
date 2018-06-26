@@ -15,7 +15,7 @@ module API
             return render_error(-1, 'flag参数不正确，只能为0或1')
           end
           
-          queued = $redis.get 'queued'
+          queued = $redis.get('queued') || []
           puts queued
           if flag == 1
             @idcard = Idcard.where.not(card_no: queued).order('RANDOM()').first
