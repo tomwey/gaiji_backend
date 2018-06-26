@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   post 'awake_tasks/:task_id/upload_log' => 'home#upload_awake_task_log'
   
   get 'util/mobile' => 'home#get_mobile'
+  get 'util/idcard' => 'home#get_idcard'
   
   # /task/url?id=484848844
   get 'task/url'    => 'home#get_task_url'

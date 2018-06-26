@@ -18,6 +18,45 @@ class HomeController < ApplicationController
     render text: tel
   end
   
+  def get_idcard
+    
+    if params[:cl] && params[:cl] == 1
+      $redis.del 'queued'
+      render text: '数据缓存已清空'
+      return
+    end
+    
+    flag = (params[:flag] || 0).to_i
+    
+    unless %w(0 1).include? flag.to_s
+      render text: 'flag参数不正确，只能为0或1'
+      return
+    end
+    
+    queued = $redis.get('queued')
+    ids = []
+    if queued.present?
+      ids = queued.split(',')
+    end
+    if flag == 1
+      @idcard = Idcard.where.not(card_no: ids).order('RANDOM()').first
+    else
+      @idcard = Idcard.order('RANDOM()').first
+    end
+    
+    if @idcard.blank?
+      render text: '无更多数据了', status: 404
+      return
+    end
+    
+    if flag == 1
+      ids << @idcard.card_no
+      $redis.set 'queued', ids.join(',')
+    end
+    
+    render text: "#{@idcard.name},#{@idcard.card_no}"
+  end
+  
   def get_task_url
     @task = NewTask.find_by(uniq_id: params[:id])
     if @task.blank?
