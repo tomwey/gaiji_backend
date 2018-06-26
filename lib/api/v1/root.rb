@@ -14,7 +14,7 @@ module API
         encode_str = Base64.urlsafe_encode64(SiteConfig.api_key + params[:i].to_s)
         # (Time.now.to_i - params[:i].to_i) > SiteConfig.access_key_expire_in.to_i
         from_api_doc = request.referer && request.referer.include?('/apidoc')
-        allow_access = request.path.include? "data/mobile"
+        allow_access = request.path.include?("data/mobile") || request.path.include?("ds/idcard")
         if !allow_access && !from_api_doc && is_pro && !is_api_doc_path
           encode_str = Digest::MD5.hexdigest(SiteConfig.api_key + params[:i].to_s)
           if ( (params[:ak].blank? or params[:i].blank?) or encode_str != params[:ak] or $redis.get('ak_code') == params[:i].to_s )
