@@ -20,7 +20,7 @@ class HomeController < ApplicationController
   
   def get_idcard
     
-    if params[:cl] && params[:cl] == 1
+    if params[:cl] && params[:cl].to_i == 1
       $redis.del 'queued'
       render text: '数据缓存已清空'
       return
