@@ -15,10 +15,13 @@ module API
             return render_error(-1, 'flag参数不正确，只能为0或1')
           end
           
-          queued = $redis.get('queued') || []
-          puts queued
+          queued = $redis.get('queued')
+          ids = []
+          if queued.present?
+            ids = queued.split(',')
+          end
           if flag == 1
-            @idcard = Idcard.where.not(card_no: queued).order('RANDOM()').first
+            @idcard = Idcard.where.not(card_no: ids).order('RANDOM()').first
           else
             @idcard = Idcard.order('RANDOM()').first
           end
@@ -28,18 +31,22 @@ module API
           end
           
           if flag == 1
-            queued << @idcard.card_no
-            $redis.set 'queued', queued
+            ids << @idcard.card_no
+            $redis.set 'queued', ids.join(',')
           end
           
           if params[:cl] && params[:cl] == 1
             $redis.del 'queued'
           end
           
-          { code: 0, message: 'ok', data: {
-            name: @idcard.name,
-            idcard: @idcard.card_no
-          } }
+          # { code: 0, message: 'ok', data: {
+#             name: @idcard.name,
+#             idcard: @idcard.card_no
+#           } }
+          {
+            id: @idcard.card_no,
+            name: @idcard.name
+          }
         end # end get idcard
         
         desc "获取一条昵称"
