@@ -12,6 +12,8 @@ ActiveAdmin.register TaskSourceLog do
 #   permitted
 # end
 
+actions :all, except: [:new, :create, :edit, :update]
+
 action_item only: :index do
   link_to '清空昨天的数据', action: 'clear_data'
 end
