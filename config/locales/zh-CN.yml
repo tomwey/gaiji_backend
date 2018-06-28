@@ -54,6 +54,8 @@
       idcard: '身份证信息'
       user_nickname: '用户昵称信息'
       user_chat: '聊天/评论'
+      task_source_log: '任务源日志'
+      device: '设备信息'
     attributes:
       user:
         uid: 'ID'
