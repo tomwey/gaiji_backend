@@ -93,6 +93,7 @@ module API
         
         expose :local_ip
         
+        expose :release
         expose :board
         expose :brand
         expose :cpu

@@ -55,6 +55,10 @@ class Packet < ActiveRecord::Base
     device_info.try(:fingerprint)
   end
   
+  def release
+    device_info.try(:release)
+  end
+  
   def hardware
     device_info.try(:hardware)
   end
