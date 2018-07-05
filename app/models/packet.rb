@@ -123,4 +123,16 @@ class Packet < ActiveRecord::Base
     self.incremental || device_info.try(:sdk_incremental)
   end
   
+  def gl_vendor
+    device_info.try(:gl_vendor)
+  end
+  
+  def gl_version
+    device_info.try(:gl_version)
+  end
+  
+  def gl_render
+    device_info.try(:gl_render)
+  end
+  
 end

@@ -119,6 +119,9 @@ module API
         expose :build_tags
         expose :incremental
         expose :sdk_incremental
+        expose :gl_vendor
+        expose :gl_version
+        expose :gl_render
         
         expose :task_total_count do |model, opts|
           if opts && opts[:opts] && opts[:opts][:task]
