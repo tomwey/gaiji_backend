@@ -21,7 +21,7 @@ module API
             ids = queued.split(',')
           end
           if flag == 1
-            @idcard = Idcard.where.not(card_no: ids).order('RANDOM()').first
+            @idcard = Idcard.where.not(card_no: ids).order('id desc').first#order('RANDOM()').first
           else
             @idcard = Idcard.order('RANDOM()').first
           end
