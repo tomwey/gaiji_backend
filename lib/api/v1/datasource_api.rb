@@ -5,6 +5,29 @@ module API
       resource :ds, desc: '身份证信息，昵称，评论，聊天数据源接口' do
         desc "获取一条身份证信息"
         params do
+          requires :proj_id, type: Integer, desc: '项目ID'
+        end
+        get :idcard_2 do
+          @project = Project.find_by(uniq_id: params[:proj_id])
+          if @project.blank?
+            return render_error(4004, '项目不存在')
+          end
+          
+          @idcards = IdcardAccessLog.where(proj_id: @project.uniq_id).pluck(:idcard)
+          idcard = Idcard.where.not(card_no: @idcards).order('id desc').first
+          if idcard.blank?
+            return render_error(4004, '无数据')
+          end
+          
+          IdcardAccessLog.create!(idcard: idcard.card_no, proj_id: @project.uniq_id)
+          
+          {
+            id: idcard.card_no,
+            name: idcard.name
+          }
+        end # end get idcard 2
+        desc "获取一条身份证信息"
+        params do
           optional :flag, type: Integer, desc: '是否获取唯一的身份证信息，值为0或1，0表示不一定唯一，1表示获取一条唯一的身份证信息'
           optional :cl, type: Integer, desc: '是否清空历史'
         end
