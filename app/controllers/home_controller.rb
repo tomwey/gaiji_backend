@@ -67,6 +67,12 @@ class HomeController < ApplicationController
     render text: @task.portal_urls.sample
   end
   
+  def get_company
+    arr = []
+    File.open("/data/www/apps/gaiji_backend_production/shared/config/companies.txt").each { |line| arr << line }
+    render text: arr.sample
+  end
+  
   def export_csv
     if params[:url].blank?
       render text: 'Not Found', status: 404

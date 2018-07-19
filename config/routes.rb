@@ -17,6 +17,8 @@ Rails.application.routes.draw do
   get 'task/url'    => 'home#get_task_url'
   post 'task/upload_log' => 'home#upload_task_log'
   
+  get 'ds/get_company' => 'home#get_company'
+  
   # /export.csv?date=2018-05-06&url=http://394949944.com
   get '/export' => 'home#export_csv'
   
