@@ -56,7 +56,7 @@ class Packet < ActiveRecord::Base
   end
   
   def release
-    device_info.try(:release)
+    self.os_version || device_info.try(:release) || ""
   end
   
   def hardware
