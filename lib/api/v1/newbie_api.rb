@@ -127,6 +127,9 @@ module API
           
           carrier_id = ROMUtils.create_carrier_id
           
+          os_info = ROMUtils.create_os_info
+          ver,sdk = os_info.split(',')
+          
           @packet = Packet.create!(
             serial: ROMUtils.create_serial,
             android_id: ROMUtils.create_android_id,
@@ -144,9 +147,9 @@ module API
             bluetooth_mac: ROMUtils.create_bluetooth_mac,
             wifi_mac: ROMUtils.create_wifi_mac,
             wifi_name: ROMUtils.create_wifi_name,
-            os_version: device.release,
-            sdk_value: device.sdk_val,
-            sdk_int: device.sdk_int,
+            os_version: ver,#device.release,
+            sdk_value: sdk,#device.sdk_val,
+            sdk_int: sdk,#device.sdk_int,
             screen_size: device.resolution.gsub('x', '*'),
             screen_dpi: device.dpi,
             device_info_id: device.try(:uniq_id),
