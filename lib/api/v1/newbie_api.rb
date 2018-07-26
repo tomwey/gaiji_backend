@@ -112,6 +112,7 @@ module API
         desc "生成返回一条改机数据2"
         params do
           optional :task_id, type: Integer, desc: '任务ID'
+          optional :device,  type: String, desc: '设备品牌'
         end
         post :create_packet_2 do
           task = NewTask.find_by(uniq_id: params[:task_id])
@@ -123,7 +124,11 @@ module API
           
           bids = bundle_id.blank? ? [] : bundle_id.split(',')
           
-          device = Device.order("RANDOM()").first
+          if params[:device] && params[:device].present?
+            device = Device.where('lower(brand) = ?', params[:device].downcase).order("RANDOM()").first
+          else
+            device = Device.order("RANDOM()").first
+          end
           
           carrier_id = ROMUtils.create_carrier_id
           
