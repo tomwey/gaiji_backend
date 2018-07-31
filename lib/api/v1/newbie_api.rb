@@ -168,71 +168,24 @@ module API
           
           render_json(@packet, API::V1::Entities::Packet, { task: task })
           
-          
-          # data = {
-#             id: 1,
-#             serial: ROMUtils.create_serial,
-#             android_id: ROMUtils.create_android_id,
-#             imei: ROMUtils.create_imei,
-#             sim_serial: ROMUtils.create_sim_serial_for(carrier_id),
-#             imsi: ROMUtils.create_imsi_for(carrier_id),
-#             sim_country: 'cn',
-#             phone_number: ROMUtils.create_tel_number_for(carrier_id),
-#             carrier_id: carrier_id,
-#             # carrier_name: ROMUtils.create_carrier_name_for(carrier_id),
-#             carrier_name: ROMUtils.create_carrier_name_for(carrier_id),
-#             network_type: ROMUtils.create_network_type,
-#             phone_type: ROMUtils.create_phone_type,
-#             sim_state: ROMUtils.create_sim_state,
-#             mac_addr: ROMUtils.create_mac_addr,
-#             bluetooth_mac: ROMUtils.create_bluetooth_mac,
-#             wifi_mac: ROMUtils.create_wifi_mac,
-#             wifi_name: ROMUtils.create_wifi_name,
-#             os_version: device.release,
-#             sdk_value: device.sdk_val,
-#             sdk_int: device.sdk_int,
-#             screen_size: device.resolution.gsub('x', '*'),
-#             screen_dpi: device.dpi,
-#             board: device.board,
-#             brand: device.brand,
-#             cpu: device.cpu,
-#             cpu2: device.abi,
-#             abi: device.abi,
-#             abi2: device.abi2,
-#             device: device.device,
-#             display: device.display,
-#             fingerprint: device.fingerprint,
-#             hardware: device.hardware,
-#             product_model: "",
-#             product_id: device.product_id,
-#             product_type: device.product_type,
-#             manufacturer: device.manufacturer,
-#             model: device.model,
-#             product: device.product,
-#             bootloader: "G9198ZMU1BPC1",
-#             host: device.host,
-#             tags: device.tags,
-#             user: device.user,
-#             firmware: device.radio_version,
-#             radio_version: device.radio_version,
-#             build_tags: device.tags,
-#             incremental: device.sdk_incremental,
-#             local_ip: ROMUtils.create_local_ip,
-#             sdk_incremental: device.sdk_incremental,
-#             task_total_count: task.task_count.to_s,
-#             task_completed_count: task.complete_count.to_s,
-#             project_name: task.project.name,
-#             bundle_ids: bids,
-#             app_url: "",
-#             extra_data: ""
-#           }
-#
-#
-          
-          # { code: 0, message: 'ok', data: data }
-          
-          
         end # end create
+        
+        desc "上传刷量任务数据"
+        params do
+          requires :id, type: String, desc: '改机数据ID'
+          requires :data, type: String, desc: '备份数据'
+        end
+        post :upload_data do
+          @log = NewTaskLog.where(packet_id: params[:id]).first
+          if @log.blank?
+            return render_error(4004, '不存在的刷量任务记录')
+          end
+          @log.extra_data = params[:data]
+          @log.save!
+          
+          render_json_no_data
+          
+        end # end upload data
         
         # desc "上传刷单日志"
         # params do
