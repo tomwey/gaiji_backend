@@ -12,7 +12,7 @@ ActiveAdmin.register NewTask do
     end
     column :task_count
     column :complete_count
-    column :task_date
+    # column :task_date
     column '留存任务总数' do |o|
       o.remain_task_count
     end
