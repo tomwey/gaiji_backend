@@ -68,7 +68,9 @@ module API
       end
       
       class Packet < Base
-        expose :uniq_id, as: :id
+        expose :id do |model,opts|
+          model.uniq_id.to_s
+        end
         expose :serial
         expose :android_id
         expose :imei
