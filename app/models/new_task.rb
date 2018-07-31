@@ -29,9 +29,9 @@ class NewTask < ActiveRecord::Base
   
   def remain_task_count
     sum = 0
-    $redis.keys("#{self.uniq_id}:*") do |key|
-      values = $redis.get(key)
-      if values.present?
+    $redis.keys("#{self.uniq_id}:*").each do |key|
+      val = $redis.get(key)
+      if val.present?
         sum += values.split(',').size
       end
     end
