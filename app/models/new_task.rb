@@ -12,6 +12,13 @@ class NewTask < ActiveRecord::Base
     end while self.class.exists?(:uniq_id => uniq_id)
   end
   
+  before_save :clear_remain_task
+  def clear_remain_task
+    if remain_ratios_changed?
+      self.clear_remain_tasks!
+    end
+  end
+  
   def increment_complete_count
     self.class.increment_counter(:complete_count, self.id)
   end
@@ -20,11 +27,32 @@ class NewTask < ActiveRecord::Base
     @project ||= Project.find_by(uniq_id: self.proj_id)
   end
   
+  def remain_task_count
+    sum = 0
+    $redis.keys("#{self.uniq_id}:*") do |key|
+      values = $redis.get(key)
+      if values.present?
+        sum += values.split(',').size
+      end
+    end
+    sum
+  end
+  
+  def remain_complete_count
+    NewTaskLog.where(task_id: self.uniq_id).where.not(do_remain_at: nil).count
+  end
+  
   # 清空已做任务
   def clear_completed_tasks!
     NewTaskLog.where(task_id: self.uniq_id).update_all(visible: false)
     self.complete_count = 0
     self.save!
+  end
+  
+  def clear_remain_tasks!
+    NewTaskLog.where(task_id: self.uniq_id).update_all(do_remain_at: nil)
+    keys = $redis.keys("#{self.uniq_id}:*")
+    $redis.del(keys)
   end
   
   TASK_TYPEs = [['默认', 0], ['唤醒', 1]]

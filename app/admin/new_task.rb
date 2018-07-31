@@ -13,6 +13,12 @@ ActiveAdmin.register NewTask do
     column :task_count
     column :complete_count
     column :task_date
+    column '留存任务总数' do |o|
+      o.remain_task_count
+    end
+    column '已做留存任务' do |o|
+      o.remain_complete_count
+    end
     column '任务类型' do |o|
       o.task_type_name
     end
@@ -24,6 +30,9 @@ ActiveAdmin.register NewTask do
       item "删除", admin_new_task_path(o), method: :delete, data: { confirm: '您确定吗？' }, class: 'btn btn-danger'
       if o.complete_count > 0
         item "清空已做任务", clear_admin_new_task_path(o), method: :put, data: { confirm: '你确定吗？' }, class: 'danger'
+      end
+      if o.remain_task_count > 0
+        item "清空已做留存", clear2_admin_new_task_path(o), method: :put, data: { confirm: '你确定吗？' }, class: 'danger'
       end
     end
   end
@@ -38,6 +47,18 @@ ActiveAdmin.register NewTask do
   member_action :clear, method: :put do
     resource.clear_completed_tasks!
     redirect_to collection_path, notice: '清空成功'
+  end
+  
+  batch_action :clear2 do |ids|
+    batch_action_collection.find(ids).each do |o|
+      o.clear_remain_tasks!
+    end
+    redirect_to collection_path, alert: "已清空留存"
+  end
+  
+  member_action :clear2, method: :put do
+    resource.clear_remain_tasks!
+    redirect_to collection_path, notice: '留存清空成功'
   end
 
   form html: { multipart: true } do |f|
