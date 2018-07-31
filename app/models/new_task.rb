@@ -52,7 +52,9 @@ class NewTask < ActiveRecord::Base
   def clear_remain_tasks!
     NewTaskLog.where(task_id: self.uniq_id).update_all(do_remain_at: nil)
     keys = $redis.keys("#{self.uniq_id}:*")
-    $redis.del(keys)
+    if keys.any? 
+      $redis.del(*keys)
+    end
   end
   
   TASK_TYPEs = [['默认', 0], ['唤醒', 1]]
