@@ -231,9 +231,13 @@ module API
           optional :date, type: String, desc: '做留存的日期，如果不传，默认为今天的日期'
         end
         get :remain_packet do
-          task = RemainTask.find_by(uniq_id: params[:task_id])
+          task = NewTask.find_by(uniq_id: params[:task_id])
           if task.blank?
-            return render_error(4004, '留存任务不存在')
+            return render_error(4004, '任务不存在')
+          end
+          
+          if task.remain_ratios.blank? or task.remain_ratios.split(',').empty?
+            return render_error(3001, '任务还未设置留存率')
           end
           
           date = params[:date]
@@ -246,13 +250,49 @@ module API
           
           if values.blank?
             ids = []
+            
+            ratios = task.remain_ratios.split(',')
+            ratios.each_with_index do |ratio,index|
+              time = (date.to_date - (index + 1).days)
+              
+              total_count = NewTaskLog.where(proj_id: task.proj_id, visible: true)
+                              .where(created_at: time.beginning_of_day..time.end_of_day).count
+              
+              ratio = ratio.to_f
+              size = ratio >= 100 ? total_count : ( (total_count * ratio / 100.0).to_i + 18 )
+              
+              logids = NewTaskLog.where(proj_id: task.proj_id, visible: true)
+                            .where(created_at: time.beginning_of_day..time.end_of_day)
+                            .order('RANDOM()').limit(size).pluck(:id)
+              ids << logids.to_s
+            end
+            
           else
             ids = values.split(',')
           end
           
-          if ids.blank?
+          if ids.blank? or ids.empty?
             return render_error(4004, '留存任务已做完')
           end
+          
+          logid = ids.sample
+          
+          @log = NewTaskLog.find_by(id: logid)
+          if @log.blank?
+            return render_error(4004, '任务不存在')
+          end
+          
+          @log.do_remain_at = Time.zone.now
+          @log.save!
+          
+          ids.delete(logid)
+          if ids.any?
+            $redis.set key, ids.join(',')
+          else
+            $redis.del key
+          end
+          
+          render_json(@log.packet, API::V1::Entities::Packet, { task: task, extra_data: @log.extra_data })
           
           # @log = RemainTaskLog.where(task_id: task.uniq_id, in_use: false).order('RANDOM()').first
           # if @log.blank?
