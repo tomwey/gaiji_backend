@@ -32,7 +32,7 @@ class NewTask < ActiveRecord::Base
     $redis.keys("#{self.uniq_id}:*").each do |key|
       val = $redis.get(key)
       if val.present?
-        sum += values.split(',').size
+        sum += val.split(',').size
       end
     end
     sum
