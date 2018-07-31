@@ -279,7 +279,7 @@ module API
           
           @log = NewTaskLog.find_by(id: logid)
           if @log.blank?
-            return render_error(4004, '任务不存在')
+            return render_error(4004, '任务记录不存在')
           end
           
           @log.do_remain_at = Time.zone.now
