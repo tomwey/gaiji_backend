@@ -264,7 +264,7 @@ module API
               logids = NewTaskLog.where(proj_id: task.proj_id, visible: true)
                             .where(created_at: time.beginning_of_day..time.end_of_day)
                             .order('RANDOM()').limit(size).pluck(:id)
-              ids << logids.to_s
+              ids = ids + logids
             end
             
           else
