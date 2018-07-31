@@ -175,8 +175,8 @@ module API
           requires :id, type: String, desc: '改机数据ID'
           requires :data, type: String, desc: '备份数据'
         end
-        post :upload_data do
-          @log = NewTaskLog.where(uniq_id: params[:id]).first
+        post :upload_data do          
+          @log = NewTaskLog.where(packet_id: params[:id]).first
           if @log.blank?
             return render_error(4004, '不存在的刷量任务记录')
           end
