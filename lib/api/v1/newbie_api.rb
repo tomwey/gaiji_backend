@@ -228,6 +228,7 @@ module API
         desc "获取某留存任务的一条改机数据"
         params do
           requires :task_id, type: Integer, desc: '留存任务ID'
+          optional :date, type: String, desc: '做留存的日期，如果不传，默认为今天的日期'
         end
         get :remain_packet do
           task = RemainTask.find_by(uniq_id: params[:task_id])
@@ -235,17 +236,35 @@ module API
             return render_error(4004, '留存任务不存在')
           end
           
-          @log = RemainTaskLog.where(task_id: task.uniq_id, in_use: false).order('RANDOM()').first
-          if @log.blank?
-            return render_error(4004, '没有留存任务')
+          date = params[:date]
+          if date.blank?
+            date = Time.zone.now.strftime('%Y-%m-%d')
           end
           
-          @log.in_use = true
-          @log.save!
+          key = "#{params[:task_id]}:#{date}"
+          values = $redis.get(key)
           
-          @log.task.increment_complete_count if @log.task.present?
+          if values.blank?
+            ids = []
+          else
+            ids = values.split(',')
+          end
           
-          render_json(@log.packet, API::V1::Entities::Packet, { task: task, extra_data: @log.extra_data })
+          if ids.blank?
+            return render_error(4004, '留存任务已做完')
+          end
+          
+          # @log = RemainTaskLog.where(task_id: task.uniq_id, in_use: false).order('RANDOM()').first
+          # if @log.blank?
+          #   return render_error(4004, '没有留存任务')
+          # end
+          # 
+          # @log.in_use = true
+          # @log.save!
+          #
+          # @log.task.increment_complete_count if @log.task.present?
+          #
+          # render_json(@log.packet, API::V1::Entities::Packet, { task: task, extra_data: @log.extra_data })
         end
         
         # desc "获取一条某个项目的留存改机数据"
