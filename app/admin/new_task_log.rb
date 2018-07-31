@@ -29,6 +29,7 @@ index do
   column '附加数据' do |o|
     o.extra_data
   end
+  column '已做留存时间', :do_remain_at
   column 'at', :created_at
   actions
   
