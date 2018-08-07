@@ -15,12 +15,12 @@ ActiveAdmin.register TaskSourceLog do
 actions :all, except: [:new, :create, :edit, :update]
 
 action_item only: :index do
-  link_to '清空昨天的数据', action: 'clear_data'
+  link_to '清空今天之前的数据', action: 'clear_data'
 end
 
 collection_action :clear_data, method: :get do
   date = (Time.zone.now - 1.days).strftime('%Y-%m-%d')
-  TaskSourceLog.where('date(created_at) = ?', date).update_all(visible: false)
+  TaskSourceLog.where('created_at < ?', Time.zone.now.beginning_of_day).update_all(visible: false)
   redirect_to collection_path, notice: "清空成功！"
 end
 
