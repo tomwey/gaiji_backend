@@ -113,6 +113,8 @@ class HomeController < ApplicationController
     params.delete 'extra'
     params.delete 'task_id'
     params.delete 'source'
+    params.delete 'controller'
+    params.delete 'action'
     
     str = ''
     params.each do |k,v|
