@@ -107,7 +107,19 @@ class HomeController < ApplicationController
       return
     end
     
-    TaskSourceLog.create!(task_id:task.uniq_id, source: params[:source], extra_data: params[:extra])
+    extra = params[:extra]
+    source = params[:source]
+    
+    params.delete 'extra'
+    params.delete 'task_id'
+    params.delete 'source'
+    
+    str = ''
+    params.each do |k,v|
+      str += "&#{k}=#{v}"
+    end
+    
+    TaskSourceLog.create!(task_id:task.uniq_id, source: source + str, extra_data: params[:extra])
     
     render text: '1'
   end
