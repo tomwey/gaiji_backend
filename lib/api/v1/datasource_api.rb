@@ -19,7 +19,7 @@ module API
             return render_error(4004, '无数据')
           end
           
-          IdcardAccessLog.create!(idcard: idcard.card_no, proj_id: @project.uniq_id)
+          IdcardAccessLog.create!(idcard: idcard.card_no, proj_id: @project.uniq_id, idcard_id: idcard.id)
           
           {
             id: idcard.card_no,
