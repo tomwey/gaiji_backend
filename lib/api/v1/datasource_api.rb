@@ -13,8 +13,8 @@ module API
             return render_error(4004, '项目不存在')
           end
           
-          @idcards = IdcardAccessLog.where(proj_id: @project.uniq_id).pluck(:idcard)
-          idcard = Idcard.where.not(card_no: @idcards).order('id desc').first
+          @ids = IdcardAccessLog.where(proj_id: @project.uniq_id).pluck(:idcard_id)
+          idcard = Idcard.where.not(id: @ids).order('id desc').first
           if idcard.blank?
             return render_error(4004, '无数据')
           end
