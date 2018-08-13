@@ -121,7 +121,7 @@ class HomeController < ApplicationController
       str += "&#{k}=#{v}"
     end
     
-    TaskSourceLog.create!(task_id:task.uniq_id, source: source + str, extra_data: params[:extra])
+    TaskSourceLog.create!(task_id:task.uniq_id, source: source + str, extra_data: extra)
     
     render text: '1'
   end
