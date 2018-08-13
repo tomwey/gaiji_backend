@@ -105,11 +105,16 @@ class HomeController < ApplicationController
     end
     
     respond_to do |format|
-      if params[:url].include? '?'
-        _,suffix = params[:url].split('?')
-        _,suffix = suffix.split('=')
+      suffix = ''
+      if params[:url] 
+        if params[:url].include? '?'
+          _,suffix = params[:url].split('?')
+          _,suffix = suffix.split('=')
+        else
+          suffix = params[:url]
+        end
       else
-        suffix = params[:url]
+        suffix = params[:task_id]
       end
       
       format.csv { send_data @data.to_csv, filename: "#{prefix}_#{suffix}.csv" }
