@@ -99,6 +99,11 @@ class HomeController < ApplicationController
       end
     end
     
+    if @data.blank? or @data.empty?
+      render text: 'No data', status: 404
+      return 
+    end
+    
     respond_to do |format|
       if params[:url].include? '?'
         _,suffix = params[:url].split('?')
