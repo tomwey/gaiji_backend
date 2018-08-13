@@ -75,7 +75,7 @@ class HomeController < ApplicationController
   
   def export_csv
     puts params[:url]
-    puts params[:task_id]s
+    puts params[:task_id]
     if params[:url].blank? or params[:task_id].blank? 
       render text: 'Not Found', status: 404
       return
