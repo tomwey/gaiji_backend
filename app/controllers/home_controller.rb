@@ -78,10 +78,25 @@ class HomeController < ApplicationController
       render text: 'Not Found', status: 404
       return
     end
-        
-    @data = TaskSourceLog.where(source: params[:url]).order('id desc')
-    if params[:date]
-      @data = @data.where('DATE(created_at) = ?', params[:date])
+    
+    @data = TaskSourceLog.order('id desc')
+    if params[:task_id]
+      @data = @data.where(task_id: params[:task_id])
+    end
+    if params[:url]
+      @data = TaskSourceLog.where(source: params[:url])
+    end
+    
+    # @data = TaskSourceLog.where(source: params[:url]).order('id desc')
+    prefix = ''
+    if params[:begin_date] and params[:end_date]
+      @data = @data.where('created_at between ? and ?', params[:begin_date], params[:end_date])
+      prefix = "#{params[:begin_date]}-#{params[:end_date]}"
+    else
+      if params[:date]
+        @data = @data.where('DATE(created_at) = ?', params[:date])
+        prefix = "#{params[:date]}"
+      end
     end
     
     respond_to do |format|
@@ -92,7 +107,7 @@ class HomeController < ApplicationController
         suffix = params[:url]
       end
       
-      format.csv { send_data @data.to_csv, filename: "#{params[:date]}_#{suffix}.csv" }
+      format.csv { send_data @data.to_csv, filename: "#{prefix}_#{suffix}.csv" }
     end
   end
   
