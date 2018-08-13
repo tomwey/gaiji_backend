@@ -14,6 +14,17 @@ ActiveAdmin.register TaskSourceLog do
 
 actions :all, except: [:new, :create, :edit, :update]
 
+index do
+  selectable_column
+  column('#',:id)
+  column '任务ID', :task_id
+  column '任务源', :source
+  column '数据', :extra_data
+  column 'at', :created_at
+  
+  actions
+end
+
 action_item only: :index do
   link_to '清空今天之前的数据', action: 'clear_data'
 end
