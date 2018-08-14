@@ -141,12 +141,15 @@ class HomeController < ApplicationController
     params.delete 'controller'
     params.delete 'action'
     
-    str = ''
-    params.each do |k,v|
-      str += "&#{k}=#{v}"
+    if source
+      str = ''
+      params.each do |k,v|
+        str += "&#{k}=#{v}"
+      end
+      source += str
     end
     
-    TaskSourceLog.create!(task_id:task.uniq_id, source: source + str, extra_data: extra)
+    TaskSourceLog.create!(task_id:task.uniq_id, source: source, extra_data: extra)
     
     render text: '1'
   end
