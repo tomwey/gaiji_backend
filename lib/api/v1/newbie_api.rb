@@ -166,7 +166,27 @@ module API
             NewTaskLog.where(task_id: task.uniq_id, proj_id: task.proj_id, packet_id: @packet.uniq_id).first_or_create!
           end
           
-          render_json(@packet, API::V1::Entities::Packet, { task: task })
+          # 获取经纬度
+          resp = RestClient.get 'http://api.map.baidu.com/location/ip', 
+                         { :params => { :ak => "z8cPGX5TKKrZOYbrAlgYcnSYHFm6o5cE",
+                                        :ip => client_ip,
+                                        :coor => 'bd09ll'
+                                      } 
+                         }
+                     
+          gps_json = JSON.parse(resp)
+          
+          lat = '0'
+          lng = '0'
+          
+          if gps_json['status'] && gps_json['status'].to_i == 0
+            if gps_json['content'] && gps_json['content']['point']
+              lat = gps_json['content']['point']['y']
+              lng = gps_json['content']['point']['x']
+            end
+          end
+          
+          render_json(@packet, API::V1::Entities::Packet, { task: task, lat: lat, lng: lng })
           
         end # end create
         

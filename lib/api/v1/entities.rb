@@ -124,6 +124,20 @@ module API
         expose :gl_vendor
         expose :gl_version
         expose :gl_render
+        expose :lat do |model,opts|
+          if opts && opts[:opts] && opts[:opts][:lat]
+            opts[:opts][:lat]
+          else
+            '0'
+          end
+        end
+        expose :lng do |model,opts|
+          if opts && opts[:opts] && opts[:opts][:lng]
+            opts[:opts][:lng]
+          else
+            '0'
+          end
+        end
         
         expose :task_total_count do |model, opts|
           if opts && opts[:opts] && opts[:opts][:task]
