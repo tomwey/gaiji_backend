@@ -73,6 +73,12 @@ class HomeController < ApplicationController
     render text: arr.sample
   end
   
+  def get_imei_imsi
+    imei = ROMUtils.create_imei
+    imsi = create_imsi_for(ROMUtils.create_carrier_id)
+    render text: "#{imei},#{imsi}"
+  end
+  
   def export_csv
     if params[:url].blank? and params[:task_id].blank? 
       render text: 'Not Found', status: 404

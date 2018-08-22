@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   post 'task/upload_log' => 'home#upload_task_log'
   
   get 'ds/get_company' => 'home#get_company'
+  get 'ds/get_imei' => 'home#get_imei_imsi'
   
   # /export.csv?date=2018-05-06&url=http://394949944.com
   get '/export' => 'home#export_csv'
