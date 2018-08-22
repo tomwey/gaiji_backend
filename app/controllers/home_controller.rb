@@ -75,7 +75,7 @@ class HomeController < ApplicationController
   
   def get_imei_imsi
     imei = ROMUtils.create_imei
-    imsi = create_imsi_for(ROMUtils.create_carrier_id)
+    imsi = ROMUtils.create_imsi_for(ROMUtils.create_carrier_id)
     render text: "#{imei},#{imsi}"
   end
   
