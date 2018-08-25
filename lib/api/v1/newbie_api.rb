@@ -275,13 +275,15 @@ module API
             ratios.each_with_index do |ratio,index|
               time = (date.to_date - (index + 1).days)
               
-              total_count = NewTaskLog.where(proj_id: task.proj_id, visible: true)
+              total_count = NewTaskLog.where(task_id: task.uniq_id, visible: true)
+                              .where("extra_data is not null and extra_data != ''")
                               .where(created_at: time.beginning_of_day..time.end_of_day).count
               
               ratio = ratio.to_f
               size = ratio >= 100 ? total_count : ( (total_count * ratio / 100.0).to_i + 18 )
               
-              logids = NewTaskLog.where(proj_id: task.proj_id, visible: true)
+              logids = NewTaskLog.where(task_id: task.uniq_id, visible: true)
+                            .where("extra_data is not null and extra_data != ''")
                             .where(created_at: time.beginning_of_day..time.end_of_day)
                             .order('RANDOM()').limit(size).pluck(:id)
               ids = ids + logids
