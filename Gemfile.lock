@@ -8,7 +8,7 @@ GIT
       mime-types (>= 1.16)
 
 GEM
-  remote: https://gems.ruby-china.org/
+  remote: https://gems.ruby-china.com/
   specs:
     actionmailer (4.2.4)
       actionpack (= 4.2.4)
