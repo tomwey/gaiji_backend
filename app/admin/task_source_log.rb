@@ -12,6 +12,10 @@ ActiveAdmin.register TaskSourceLog do
 #   permitted
 # end
 
+filter :task_id, label: '任务ID'
+filter :source,  label: '任务源'
+filter :created_at, label: '创建时间'
+
 actions :all, except: [:new, :create, :edit, :update]
 
 index do
