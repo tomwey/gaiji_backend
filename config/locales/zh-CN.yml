@@ -276,6 +276,18 @@
         proj_id: '所属项目'
         need_task_count: '需要任务数'
         join_task_count: '已经加入的任务数'
+      task_source_log:
+        task_id: '任务ID'
+        source:  '任务源'
+        extra_data: '数据'
+        created_at: '创建日期'
+      new_task_log:
+        uniq_id: '流水号'
+        task_id: '任务ID'
+        proj_id: '项目ID'
+        extra_data: '附加数据'
+        created_at: '创建时间'
+        do_remain_at: '做留存时间'
       awake_task:
         task_date: '任务日期'
         proj_id: '所属项目'

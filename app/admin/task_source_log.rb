@@ -15,6 +15,7 @@ ActiveAdmin.register TaskSourceLog do
 filter :task_id, label: '任务ID'
 filter :source,  label: '任务源'
 filter :created_at, label: '创建时间'
+filter :extra_data
 
 actions :all, except: [:new, :create, :edit, :update]
 

@@ -5,6 +5,13 @@ ActiveAdmin.register NewTaskLog do
   actions :all, except: [:new, :create, :edit, :update]
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
+
+filter :uniq_id
+filter :task_id
+filter :proj_id
+filter :extra_data
+filter :created_at
+filter :do_remain_at
 #
 # permit_params :list, :of, :attributes, :on, :model
 #
