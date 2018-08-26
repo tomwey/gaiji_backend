@@ -7,6 +7,9 @@ Rails.application.routes.draw do
   
   get 'install' => 'home#install'
   
+  # 逍遥棋牌 /share?type=1或2&game_id=39383838&inviter_id=49494848&headurl=xxxxx&nick=xxxxxxxtitle=血战
+  get 'share' => 'home#share'
+  
   get 'app/start' => 'home#app_start'
   post 'awake_tasks/:task_id/upload_log' => 'home#upload_awake_task_log'
   

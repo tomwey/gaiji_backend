@@ -33,6 +33,10 @@ class HomeController < ApplicationController
       return
     end
     
+    def share
+      @type = params[:type]
+    end
+    
     queued = $redis.get('queued')
     ids = []
     if queued.present?
