@@ -130,6 +130,7 @@ class HomeController < ApplicationController
       
       format.csv { send_data @data.to_csv, filename: "#{prefix}_#{suffix}.csv" }
     end
+    
   end
   
   # post /task/upload_log
