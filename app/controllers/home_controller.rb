@@ -115,6 +115,7 @@ class HomeController < ApplicationController
       return 
     end
     
+    puts @data.size
     respond_to do |format|
       suffix = ''
       if params[:url] 
