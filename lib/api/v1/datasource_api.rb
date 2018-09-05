@@ -13,18 +13,55 @@ module API
             return render_error(4004, '项目不存在')
           end
           
-          @ids = IdcardAccessLog.where(proj_id: @project.uniq_id).pluck(:idcard_id)
-          idcard = Idcard.where.not(id: @ids).order('id desc').first
-          if idcard.blank?
-            return render_error(4004, '无数据')
+          key ="#{@project.uniq_id}"
+          ids = $redis.get(key)
+          if ids.blank?
+            @ids = IdcardAccessLog.where(proj_id: @project.uniq_id).pluck(:idcard_id)
+            not_ids = Idcard.where.not(id: @ids).pluck(:id)
+            # $redis.set @project.uniq_id, not_ids.join(',')
+          else
+            not_ids = ids.split(',')
           end
           
-          IdcardAccessLog.create!(idcard: idcard.card_no, proj_id: @project.uniq_id, idcard_id: idcard.id)
+          if not_ids.empty?
+            return render_error(4004, '无身份证信息')
+          end
+          
+          cid = not_ids.sample
+          
+          idcard = Idcard.find_by(id: cid)
+          if idcard.blank?
+            return render_error(4004, '未找到身份证')
+          end
+          
+          not_ids.delete(cid)
+          
+          # ids.delete(logid)
+          if not_ids.any?
+            $redis.set key, not_ids.join(',')
+          else
+            $redis.del key
+          end
+          
+          # IdcardAccessLog.create!(idcard: idcard.card_no, proj_id: @project.uniq_id, idcard_id: idcard.id)
           
           {
             id: idcard.card_no,
             name: idcard.name
           }
+          
+          # @ids = IdcardAccessLog.where(proj_id: @project.uniq_id).pluck(:idcard_id)
+          # idcard = Idcard.where.not(id: @ids).order('id desc').first
+          # if idcard.blank?
+          #   return render_error(4004, '无数据')
+          # end
+          #
+          # IdcardAccessLog.create!(idcard: idcard.card_no, proj_id: @project.uniq_id, idcard_id: idcard.id)
+          #
+          # {
+          #   id: idcard.card_no,
+          #   name: idcard.name
+          # }
         end # end get idcard 2
         desc "获取一条身份证信息"
         params do
