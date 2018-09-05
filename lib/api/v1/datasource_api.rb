@@ -7,6 +7,52 @@ module API
         params do
           requires :proj_id, type: Integer, desc: '项目ID'
         end
+        get :idcard_3 do
+          @project = Project.find_by(uniq_id: params[:proj_id])
+          if @project.blank?
+            return render_error(4004, '项目不存在')
+          end
+          
+          key = "idcard:#{@project.uniq_id}"
+          id_vals = $redis.get key
+          if id_vals.blank?
+            @ids = IdcardAccessLog.where(proj_id: @project.uniq_id).pluck(:idcard_id)
+            ids = Idcard.where.not(id: @ids).limit(30000).pluck(:id)
+          else
+            ids = id_vals.split(',')
+          end
+          
+          if ids.blank? or ids.empty?
+            return render_error(4004, '身份证已取完')
+          end
+          
+          cid = ids.sample
+          
+          idcard = Idcard.find_by(id: cid)
+          if idcard.blank?
+            return render_error(4004, '身份证不存在')
+          end
+          
+          ids.delete(cid)
+          if ids.any?
+            $redis.set key, ids.join(',')
+          else
+            $redis.del key
+          end
+          
+          IdcardAccessLog.create!(idcard: idcard.card_no, proj_id: @project.uniq_id, idcard_id: idcard.id)
+
+          {
+            id: idcard.card_no,
+            name: idcard.name
+          }
+          
+        end
+        
+        desc "获取一条身份证信息"
+        params do
+          requires :proj_id, type: Integer, desc: '项目ID'
+        end
         get :idcard_2 do
           @project = Project.find_by(uniq_id: params[:proj_id])
           if @project.blank?
