@@ -3,6 +3,63 @@ module API
   module V1
     class DatasourceAPI < Grape::API
       resource :ds, desc: '身份证信息，昵称，评论，聊天数据源接口' do
+        desc "过滤身份证信息，并返回一条数据"
+        params do
+          requires :proj_id, type: Integer, desc: '项目ID'
+          requires :range,   type: String,  desc: '身份证出生年的范围，值为1950,1980或1950,或者,1980'
+        end
+        get :idcard_4 do
+          @project = Project.find_by(uniq_id: params[:proj_id])
+          if @project.blank?
+            return render_error(4004, '项目不存在')
+          end
+          
+          key = "idcard:#{@project.uniq_id}:#{params[:range]}"
+          id_vals = $redis.get key
+          if id_vals.blank?
+            @ids = IdcardAccessLog.where(proj_id: @project.uniq_id).pluck(:idcard_id)
+            
+            first,last = params[:range].split(',')
+            if first.present? and last.present?
+              ids = Idcard.where.not(id: @ids).where("substring(card_no, 7, 4) != '' and (cast(substring(card_no, 7, 4) as integer) between #{first} and #{last})").limit(10000).pluck(:id)
+            elsif first.present? and last.blank?
+              ids = Idcard.where.not(id: @ids).where("substring(card_no, 7, 4) != '' and (cast(substring(card_no, 7, 4) as integer) >= #{first}").limit(10000).pluck(:id)
+            elsif first.blank? and last.present?
+              ids = Idcard.where.not(id: @ids).where("substring(card_no, 7, 4) != '' and (cast(substring(card_no, 7, 4) as integer) <= #{last}").limit(10000).pluck(:id)
+            else
+              ids = Idcard.where.not(id: @ids).limit(10000).pluck(:id)
+            end
+          else
+            ids = id_vals.split(',')
+          end
+          
+          if ids.blank? or ids.empty?
+            return render_error(4004, '身份证已取完')
+          end
+          
+          cid = ids.sample
+          
+          idcard = Idcard.find_by(id: cid)
+          if idcard.blank?
+            return render_error(4004, '身份证不存在')
+          end
+          
+          ids.delete(cid)
+          if ids.any?
+            $redis.set key, ids.join(',')
+          else
+            $redis.del key
+          end
+          
+          IdcardAccessLog.create!(idcard: idcard.card_no, proj_id: @project.uniq_id, idcard_id: idcard.id)
+
+          {
+            id: idcard.card_no,
+            name: idcard.name
+          }
+          
+        end
+        
         desc "获取一条身份证信息"
         params do
           requires :proj_id, type: Integer, desc: '项目ID'
