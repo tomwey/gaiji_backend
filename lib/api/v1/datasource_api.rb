@@ -74,7 +74,7 @@ module API
           id_vals = $redis.get key
           if id_vals.blank?
             @ids = IdcardAccessLog.where(proj_id: @project.uniq_id).pluck(:idcard_id)
-            ids = Idcard.where.not(id: @ids).limit(30000).pluck(:id)
+            ids = Idcard.where('id >= 1001430').where.not(id: @ids).pluck(:id)
           else
             ids = id_vals.split(',')
           end
