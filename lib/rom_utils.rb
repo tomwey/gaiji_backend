@@ -51,6 +51,13 @@ class ROMUtils
     return "cn"
   end
   
+  # 生成随机姓名
+  def self.create_chinese_name
+    first_words = %w(赵 钱 孙 李 周 吴 郑 王 冯 陈 褚 卫 蒋 沈 韩 杨 朱 秦 尤 许 何 吕 施 张 孔 曹 严 华 金 魏 陶  姜 戚 谢 邹)
+    name_words = %w(哥 总 方舟 国庆 国强 姐 老弟 老兄 掌柜 小伟 小姐 二娃 老表 舅子)
+    return "#{first_words[rand(0...first_words.length)]}#{name_words[rand(0...name_words.length)]}"
+  end
+  
   def self.create_tel_number
     tel_prefix = %w(130 131 132 133 134 135 136 137 138 139 150 151 152 153 155 156 157 158 159 177 180 181 182 183 187 189)
     tel = tel_prefix[rand(0...tel_prefix.length)].to_s + rand.to_s[2..9]

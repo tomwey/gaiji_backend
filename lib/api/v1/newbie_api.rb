@@ -140,9 +140,10 @@ module API
           if params[:need_mobiles] && params[:need_mobiles].to_i == 1
             # 生成 5 个随机手机号
             5.times do
+              name = ROMUtils.create_chinese_name
               carrier_id = ROMUtils.create_carrier_id
               mobile = ROMUtils.create_tel_number_for(carrier_id)
-              mobiles << mobile
+              mobiles << "#{name}:#{mobile}"
             end
           end
           
