@@ -170,8 +170,7 @@ module API
             screen_dpi: device.dpi,
             device_info_id: device.try(:uniq_id),
             device_info_type: 'Device',
-            local_ip: ROMUtils.create_local_ip,
-            mobiles: mobiles
+            local_ip: ROMUtils.create_local_ip
           )
           
           if task.present?
@@ -202,7 +201,7 @@ module API
             end
           end
           
-          render_json(@packet, API::V1::Entities::Packet, { task: task, lat: lat, lng: lng })
+          render_json(@packet, API::V1::Entities::Packet, { task: task, lat: lat, lng: lng, mobiles: mobiles })
           
         end # end create
         

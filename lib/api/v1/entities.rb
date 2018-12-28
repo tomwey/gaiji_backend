@@ -139,6 +139,14 @@ module API
           end
         end
         
+        expose :mobiles do |model,opts|
+          if opts && opts[:opts] && opts[:opts][:mobiles]
+            opts[:opts][:mobiles]
+          else
+            []
+          end
+        end
+        
         expose :task_total_count do |model, opts|
           if opts && opts[:opts] && opts[:opts][:task]
             task = opts[:opts][:task]
