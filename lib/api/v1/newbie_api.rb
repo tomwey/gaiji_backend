@@ -113,6 +113,7 @@ module API
         params do
           optional :task_id, type: Integer, desc: '任务ID'
           optional :device,  type: String, desc: '设备品牌'
+          optional :need_mobiles, type: Integer, desc: '是否需要生成手机号'
         end
         post :create_packet_2 do
           task = NewTask.find_by(uniq_id: params[:task_id])
@@ -134,6 +135,16 @@ module API
           
           os_info = ROMUtils.create_os_info
           ver,sdk = os_info.split(',')
+          
+          mobiles = []
+          if params[:need_mobiles] && params[:need_mobiles].to_i == 1
+            # 生成 5 个随机手机号
+            5.times do
+              carrier_id = ROMUtils.create_carrier_id
+              mobile = ROMUtils.create_tel_number_for(carrier_id)
+              mobiles << mobile
+            end
+          end
           
           @packet = Packet.create!(
             serial: ROMUtils.create_serial,
@@ -159,11 +170,16 @@ module API
             screen_dpi: device.dpi,
             device_info_id: device.try(:uniq_id),
             device_info_type: 'Device',
-            local_ip: ROMUtils.create_local_ip
+            local_ip: ROMUtils.create_local_ip,
+            mobiles: mobiles
           )
           
           if task.present?
-            NewTaskLog.where(task_id: task.uniq_id, proj_id: task.proj_id, packet_id: @packet.uniq_id).first_or_create!
+            @log = NewTaskLog.where(task_id: task.uniq_id, proj_id: task.proj_id, packet_id: @packet.uniq_id).first_or_create!
+            if mobiles.any?
+              @log.extra_data = mobiles.join(',')
+              @log.save!
+            end
           end
           
           # 获取经纬度
