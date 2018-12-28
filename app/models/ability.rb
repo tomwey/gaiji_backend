@@ -12,6 +12,9 @@ class Ability
       cannot :manage, AdminUser, email: Setting.admin_emails
       cannot :destroy, :all
     else
+      cannot :manage, :all
+      # cannot :update, :all
+      
       can :read, :all
       cannot :read, SiteConfig
       
