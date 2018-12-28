@@ -25,14 +25,14 @@ ActiveAdmin.register NewTask do
     column :created_at
   
     actions defaults: false do |o|
-      item "查看", admin_new_task_path(o)
-      item "编辑", edit_admin_new_task_path(o)
-      item "删除", admin_new_task_path(o), method: :delete, data: { confirm: '您确定吗？' }, class: 'btn btn-danger'
+      item "查看", admin_new_task_path(o) if authorized?(:read, o)
+      item "编辑", edit_admin_new_task_path(o) if authorized?(:update, o)
+      item "删除", admin_new_task_path(o), method: :delete, data: { confirm: '您确定吗？' }, class: 'btn btn-danger' if authorized?(:destroy, o)
       if o.complete_count > 0
-        item "清空已做任务", clear_admin_new_task_path(o), method: :put, data: { confirm: '你确定吗？' }, class: 'danger'
+        item "清空已做任务", clear_admin_new_task_path(o), method: :put, data: { confirm: '你确定吗？' }, class: 'danger' if authorized?(:clear, o)
       end
       if o.remain_task_count > 0
-        item "清空已做留存", clear2_admin_new_task_path(o), method: :put, data: { confirm: '你确定吗？' }, class: 'danger'
+        item "清空已做留存", clear2_admin_new_task_path(o), method: :put, data: { confirm: '你确定吗？' }, class: 'danger' if authorized?(:clear2, o)
       end
     end
   end
