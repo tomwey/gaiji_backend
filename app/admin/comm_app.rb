@@ -12,4 +12,14 @@ permit_params :name, :bundle_id
 #   permitted
 # end
 
+form do |f|
+  f.semantic_errors
+  
+  f.inputs '基本信息' do
+    f.input :name
+    f.input :bundle_id
+  end
+  actions
+end
+
 end
