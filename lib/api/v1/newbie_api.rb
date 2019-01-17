@@ -368,7 +368,29 @@ module API
             mobiles = @log.contacts.split(',')
           end
           
-          render_json(@log.packet, API::V1::Entities::Packet, { task: task, mobiles: mobiles, apps: apps, extra_data: @log.extra_data })
+          # 获取经纬度
+          lat = ''
+          lng = ''
+          project = @log.project
+          if project && project.need_gps
+            resp = RestClient.get 'http://api.map.baidu.com/location/ip', 
+                           { :params => { :ak => "z8cPGX5TKKrZOYbrAlgYcnSYHFm6o5cE",
+                                          :ip => client_ip,
+                                          :coor => 'bd09ll'
+                                        } 
+                           }
+                     
+            gps_json = JSON.parse(resp)
+          
+            if gps_json['status'] && gps_json['status'].to_i == 0
+              if gps_json['content'] && gps_json['content']['point']
+                lat = gps_json['content']['point']['y']
+                lng = gps_json['content']['point']['x']
+              end
+            end
+          end
+          
+          render_json(@log.packet, API::V1::Entities::Packet, { task: task, lat: lat, lng: lng, mobiles: mobiles, apps: apps, extra_data: @log.extra_data })
           
           # @log = RemainTaskLog.where(task_id: task.uniq_id, in_use: false).order('RANDOM()').first
           # if @log.blank?
