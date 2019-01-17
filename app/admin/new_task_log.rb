@@ -33,6 +33,13 @@ index do
   column '设备身份信息' do |o|
     o.packet.blank? ? '--' : link_to(o.packet.imei, [:admin, o.packet])
   end
+  column '手机通讯录' do |o|
+    if o.contacts.present?
+      raw("#{o.contacts.split(',').join('<br>')}"
+    else
+      ''
+    end
+  end
   column '附加数据' do |o|
     o.extra_data
   end
