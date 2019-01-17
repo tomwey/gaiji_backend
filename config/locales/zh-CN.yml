@@ -56,6 +56,7 @@
       user_chat: '聊天/评论'
       task_source_log: '任务源日志'
       device: '设备信息'
+      comm_app: "常用APP"
     attributes:
       user:
         uid: 'ID'
@@ -224,6 +225,9 @@
         need_gps: '是否需要模拟定位功能'
         need_comm_app: '是否需要模拟安装常用APP'
         need_contacts: '是否需要模拟手机通讯录'
+      comm_app:
+        name: "APP名字"
+        bundle_id: "APP包名"
       packet:
         serial: '序列号'
         android_id: 'android id'  
