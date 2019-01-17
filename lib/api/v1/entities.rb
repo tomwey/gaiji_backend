@@ -128,20 +128,28 @@ module API
           if opts && opts[:opts] && opts[:opts][:lat]
             opts[:opts][:lat]
           else
-            '0'
+            ''
           end
         end
         expose :lng do |model,opts|
           if opts && opts[:opts] && opts[:opts][:lng]
             opts[:opts][:lng]
           else
-            '0'
+            ''
           end
         end
         
         expose :mobiles do |model,opts|
           if opts && opts[:opts] && opts[:opts][:mobiles]
             opts[:opts][:mobiles]
+          else
+            []
+          end
+        end
+        
+        expose :in_use_apps do |model,opts|
+          if opts && opts[:opts] && opts[:opts][:apps]
+            opts[:opts][:apps]
           else
             []
           end

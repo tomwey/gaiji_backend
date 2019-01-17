@@ -117,11 +117,12 @@ module API
         end
         post :create_packet_2 do
           task = NewTask.find_by(uniq_id: params[:task_id])
-          if task.blank? or (task.task_count <= task.complete_count)
+          project = task.project
+          if task.blank? or project.blank? or (task.task_count <= task.complete_count)
             return render_error(4004, '任务不存在或已经做完')
           end
           
-          bundle_id = task.project.try(:bundle_id)
+          bundle_id = project.try(:bundle_id)
           
           bids = bundle_id.blank? ? [] : bundle_id.split(',')
           
@@ -137,13 +138,17 @@ module API
           ver,sdk = os_info.split(',')
           
           mobiles = []
-          if params[:need_mobiles] && params[:need_mobiles].to_i == 1
-            # 生成 5 个随机手机号
-            5.times do
+          if project.try(:need_contacts)
+            # 生成 5 - 10 个随机手机号
+            count = 5 + rand(5)
+            loop do
               name = ROMUtils.create_chinese_name
               carrier_id = ROMUtils.create_carrier_id
               mobile = ROMUtils.create_tel_number_for(carrier_id)
-              mobiles << "#{name}:#{mobile}"
+              mobile_name = "#{name}:#{mobile}"
+              next if mobiles.include? mobile_name
+              mobiles << mobile_name
+              break if mobiles.size >= count
             end
           end
           
@@ -174,35 +179,52 @@ module API
             local_ip: ROMUtils.create_local_ip
           )
           
-          if task.present?
-            @log = NewTaskLog.where(task_id: task.uniq_id, proj_id: task.proj_id, packet_id: @packet.uniq_id).first_or_create!
-            if mobiles.any?
-              @log.extra_data = mobiles.join(',')
-              @log.save!
-            end
+          @log = NewTaskLog.where(task_id: task.uniq_id, proj_id: task.proj_id, packet_id: @packet.uniq_id).first_or_create!
+          
+          # 获取常用安装软件
+          @apps = []
+          if project.need_comm_app
+            size = 5 + rand(5)
+            @apps = CommApp.order('RANDOM()').limit(size).pluck(:bundle_id)
           end
           
           # 获取经纬度
-          resp = RestClient.get 'http://api.map.baidu.com/location/ip', 
-                         { :params => { :ak => "z8cPGX5TKKrZOYbrAlgYcnSYHFm6o5cE",
-                                        :ip => client_ip,
-                                        :coor => 'bd09ll'
-                                      } 
-                         }
+          lat = ''
+          lng = ''
+          if project.need_gps
+            resp = RestClient.get 'http://api.map.baidu.com/location/ip', 
+                           { :params => { :ak => "z8cPGX5TKKrZOYbrAlgYcnSYHFm6o5cE",
+                                          :ip => client_ip,
+                                          :coor => 'bd09ll'
+                                        } 
+                           }
                      
-          gps_json = JSON.parse(resp)
+            gps_json = JSON.parse(resp)
           
-          lat = '0'
-          lng = '0'
-          
-          if gps_json['status'] && gps_json['status'].to_i == 0
-            if gps_json['content'] && gps_json['content']['point']
-              lat = gps_json['content']['point']['y']
-              lng = gps_json['content']['point']['x']
+            if gps_json['status'] && gps_json['status'].to_i == 0
+              if gps_json['content'] && gps_json['content']['point']
+                lat = gps_json['content']['point']['y']
+                lng = gps_json['content']['point']['x']
+              end
             end
           end
           
-          render_json(@packet, API::V1::Entities::Packet, { task: task, lat: lat, lng: lng, mobiles: mobiles })
+          if mobiles.any?
+            @log.contacts = mobiles.join(',')
+          end
+          
+          if @apps.any?
+            @log.in_use_apps = @apps.join(',')
+          end
+          
+          if lat.present? and lng.present?
+            @log.ip_gps = "#{client_ip}:#{lat},#{lng}"
+            @log.map_type = project.map_type
+          end
+          
+          @log.save!
+          
+          render_json(@packet, API::V1::Entities::Packet, { task: task, lat: lat, lng: lng, mobiles: mobiles, apps: @apps })
           
         end # end create
         
@@ -334,7 +356,19 @@ module API
             $redis.del key
           end
           
-          render_json(@log.packet, API::V1::Entities::Packet, { task: task, extra_data: @log.extra_data })
+          # render_json(@packet, API::V1::Entities::Packet, { task: task, lat: lat, lng: lng, mobiles: mobiles, apps: @apps })
+          
+          apps = []
+          if @log.in_use_apps.present?
+            apps = @log.in_use_apps.split(",")
+          end
+          
+          mobiles = []
+          if @log.contacts.present?
+            mobiles = @log.contacts.split(',')
+          end
+          
+          render_json(@log.packet, API::V1::Entities::Packet, { task: task, mobiles: mobiles, apps: apps, extra_data: @log.extra_data })
           
           # @log = RemainTaskLog.where(task_id: task.uniq_id, in_use: false).order('RANDOM()').first
           # if @log.blank?

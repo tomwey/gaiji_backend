@@ -225,6 +225,7 @@
         need_gps: '是否需要模拟定位功能'
         need_comm_app: '是否需要模拟安装常用APP'
         need_contacts: '是否需要模拟手机通讯录'
+        map_type: "虚拟定位解析提供方"
       comm_app:
         name: "APP名字"
         bundle_id: "APP包名"

@@ -4,7 +4,7 @@ ActiveAdmin.register Project do
 #
 menu parent: 'rom_menu', priority: 3, label: '项目管理'
 
-permit_params :name, :icon, :bundle_id, :task_count, :task_started_at, :task_desc, :download_urls_val, :opened, :awake_urls_val, :need_gps, :need_comm_app, :need_contacts
+permit_params :name, :icon, :bundle_id, :task_count, :task_started_at, :task_desc, :download_urls_val, :opened, :awake_urls_val, :need_gps, :need_comm_app, :need_contacts, :map_type
 #
 
 index do
@@ -37,6 +37,7 @@ form html: { multipart: true } do |f|
     f.input :name, placeholder: '输入项目名字'
     f.input :bundle_id, placeholder: '输入项目包名或bundle id', required: true
     f.input :need_gps
+    f.input :map_type, as: :select, collection: [['百度地图', 1], ['高德地图', 2], ['腾讯地图', 3]]
     f.input :need_comm_app
     f.input :need_contacts
     f.input :task_count, placeholder: '刷单任务量，整数'
