@@ -4,7 +4,7 @@ ActiveAdmin.register Project do
 #
 menu parent: 'rom_menu', priority: 3, label: '项目管理'
 
-permit_params :name, :icon, :bundle_id, :task_count, :task_started_at, :task_desc, :download_urls_val, :opened, :awake_urls_val
+permit_params :name, :icon, :bundle_id, :task_count, :task_started_at, :task_desc, :download_urls_val, :opened, :awake_urls_val, :need_gps, :need_comm_app, :need_contacts
 #
 
 index do
@@ -18,6 +18,10 @@ index do
   # column :task_count
   # column :complete_count
   # column :task_started_at
+  column :need_gps
+  column :need_comm_app
+  column :need_contacts
+  
   column :task_desc
   column '唤醒地址' do |o|
     raw o.awake_urls.join('<br>')
@@ -32,6 +36,9 @@ form html: { multipart: true } do |f|
   f.inputs '基本信息' do
     f.input :name, placeholder: '输入项目名字'
     f.input :bundle_id, placeholder: '输入项目包名或bundle id', required: true
+    f.input :need_gps
+    f.input :need_comm_app
+    f.input :need_contacts
     f.input :task_count, placeholder: '刷单任务量，整数'
     f.input :icon, hint: '图片格式为：jpg,jpeg,gif,png'
     f.input :task_started_at, as: :string, placeholder: '输入的时间格式为：2017-01-01 12:00'

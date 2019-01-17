@@ -221,6 +221,9 @@
         opened: '是否打开'
         task_desc: '任务说明'
         created_at: 'at'
+        need_gps: '是否需要模拟定位功能'
+        need_comm_app: '是否需要模拟安装常用APP'
+        need_contacts: '是否需要模拟手机通讯录'
       packet:
         serial: '序列号'
         android_id: 'android id'  
