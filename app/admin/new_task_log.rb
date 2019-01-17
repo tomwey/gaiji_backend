@@ -35,7 +35,7 @@ index do
   end
   column '手机通讯录' do |o|
     if o.contacts.present?
-      raw("#{o.contacts.split(',').join('<br>')}"
+      raw("#{o.contacts.split(',').join('<br>')}")
     else
       ''
     end
