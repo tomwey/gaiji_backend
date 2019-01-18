@@ -27,6 +27,10 @@ class Packet < ActiveRecord::Base
     self[:local_ip] || ROMUtils.create_local_ip
   end
   
+  def memory
+    device_info.try(:memory) || ''
+  end
+  
   def cpu
     device_info.try(:cpu) || ''
   end

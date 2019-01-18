@@ -100,6 +100,7 @@ module API
         expose :brand
         expose :cpu
         expose :cpu2
+        expose :memory
         expose :abi
         expose :abi2
         expose :device
